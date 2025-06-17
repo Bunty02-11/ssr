@@ -1,0 +1,239 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Performance optimizations */
+* {
+  box-sizing: border-box;
+}
+
+/* Critical path optimizations */
+.hero-title-section h1 {
+  will-change: contents;
+  font-display: swap;
+}
+
+/* Hero banner LCP optimization */
+.object-cover {
+  object-fit: cover !important;
+  object-position: center !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Faster rendering */
+.bg-black {
+  background-color: #000 !important;
+}
+
+/* Prevent FOUC */
+html {
+  visibility: visible;
+}
+
+/* Skeleton loader optimizations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Layout shift prevention */
+.card-container {
+  contain: layout style paint;
+  min-height: 280px; /* Ensure consistent height */
+}
+
+/* Remove default focus styles that cause blue coloring */
+.card-container:focus,
+.card-container:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.card-container * {
+  color: inherit !important;
+}
+
+.card-container:focus *,
+.card-container:focus-visible * {
+  color: inherit !important;
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 750px) {
+  .card-container {
+    /* min-height: 210px; */
+    /* max-width: 180px; */
+  }
+  
+  /* Remove blue tap highlight on mobile */
+  .card-container button {
+    -webkit-tap-highlight-color: transparent;
+    outline: none !important;
+  }
+  
+  /* Ensure buttons work on touch devices */
+  .card-container button:focus,
+  .card-container button:active {
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
+@media (max-width: 450px) {
+  .card-container {
+    /* min-height: 180px; */
+    max-width: 160px;
+  }
+  
+  /* Optimize mobile grid layout */
+  .mobile-product-grid {
+    contain: layout;
+    will-change: auto;
+  }
+  
+  /* Prevent layout shifts during loading */
+  .mobile-product-grid > div {
+    contain: layout;
+  }
+}
+
+/* Prevent layout shifts on all sections */
+section {
+  contain: layout;
+}
+
+/* Skeleton loader specific fixes */
+.skeleton-grid {
+  min-height: 280px;
+  contain: layout;
+}
+
+/* Home page title section optimization */
+.hero-title-section {
+  contain: layout style;
+  min-height: 200px;
+}
+
+/* Image loading optimization */
+img {
+  content-visibility: auto;
+}
+
+/* Sort dropdown styles */
+.sort-dropdown {
+  position: relative;
+}
+
+.sort-dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.sort-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  z-index: 20;
+  min-width: 200px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.sort-dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+}
+
+.sort-dropdown-item:hover {
+  background-color: #f3f4f6;
+}
+
+.sort-dropdown-item.active {
+  background-color: #000;
+  color: white;
+}
+
+/* Video optimization */
+video {
+  will-change: transform;
+}
+
+/* Mobile performance optimizations */
+@media (max-width: 750px) {
+  /* Optimize scrolling performance */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Reduce repaints */
+  .card-container img {
+    will-change: auto;
+    transform: translateZ(0);
+  }
+  
+  /* Optimize mobile animations */
+  .animate-pulse {
+    animation-duration: 1.5s;
+  }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse {
+    animation: none;
+  }
+  
+  video {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  /* Disable transforms for reduced motion */
+  .card-container img {
+    will-change: auto;
+    transform: none;
+  }
+}
+
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw;
+}
+
+.no-x-scroll {
+  overflow-x: hidden !important;
+}
+
+@media (max-width: 450px) {
+  .mq450\:max-w-\[410px\] {
+    max-width: 410px !important;
+  }
+  .mq450\:mx-auto {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}

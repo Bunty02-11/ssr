@@ -1,0 +1,237 @@
+/* Local Inter font - No external requests, zero render blocking */
+@import url("/fonts/inter-local.css");
+/* @import url("https://fonts.googleapis.com/css2?family=Helvetica+Neue:wght@500&display=swap"); */
+/* @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400&display=swap"); */
+/* @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"); */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+body {
+  @apply leading-[normal] m-0;
+  scroll-behavior: smooth;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+*,
+::before,
+::after {
+  border-width: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Add smooth transitions for all elements */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 5s ease-in-out infinite;
+}
+
+/* Text reveal animation */
+@keyframes revealText {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.reveal-text {
+  animation: revealText 1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+/* Parallax effect */
+.parallax {
+  transform: translateY(var(--parallax-y, 0));
+  transition: transform 0.1s ease-out;
+}
+
+/* Shimmer effect for product cards */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-effect::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, 
+    rgba(255,255,255,0) 0%, 
+    rgba(255,255,255,0.1) 50%, 
+    rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Fade-in animation for page elements */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+/* Staggered fade-in for lists */
+.stagger-fade-in > * {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.stagger-fade-in > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-fade-in > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-fade-in > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-fade-in > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-fade-in > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-fade-in > *:nth-child(6) { animation-delay: 0.6s; }
+
+/* Custom cursor effect */
+.custom-cursor {
+  cursor: default;
+}
+
+/* Remove cursor-dot and cursor-outline styles */
+
+/* Collection dropdown styles */
+#collection-dropdown {
+  position: fixed;
+  z-index: 99999 !important; /* Highest z-index to ensure it's above everything */
+  background-color: #1a1a1a;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Add a small delay before hiding the dropdown to make it easier to interact with */
+#collection-dropdown:hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+/* Add cursor pointer to dropdown items */
+#collection-dropdown a {
+  cursor: pointer;
+}
+
+/* Category dropdown styles */
+#category-dropdown {
+  position: fixed;
+  z-index: 99999 !important; /* Highest z-index to ensure it's above everything */
+  background-color: #1a1a1a;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Add a small delay before hiding the dropdown to make it easier to interact with */
+#category-dropdown:hover {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+/* Add cursor pointer to dropdown items */
+#category-dropdown a {
+  cursor: pointer;
+}
+
+/* Remove cursor-outline styles */
+
+/* Custom Swiper Navigation Styles */
+.offers-swiper .swiper-button-next,
+.offers-swiper .swiper-button-prev {
+  display: none;
+}
+
+.swiper-button-next-offers,
+.swiper-button-prev-offers {
+  cursor: pointer;
+  transition: opacity 0.3s;
+}
+
+.swiper-button-next-offers:hover,
+.swiper-button-prev-offers:hover {
+  opacity: 0.7;
+}
+
+.swiper-button-disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Sorting dropdown styles */
+.sort-dropdown {
+  position: relative;
+}
+
+.sort-dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.5rem;
+  width: 14rem;
+  border-radius: 0.375rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  background-color: #1f2937;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.sort-dropdown-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.2s;
+}
+
+.sort-dropdown-item:hover {
+  background-color: #374151;
+}
+
+.sort-dropdown-item.active {
+  color: #60a5fa;
+}
+
+/* Close dropdown when clicking outside */
+.sort-dropdown-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}

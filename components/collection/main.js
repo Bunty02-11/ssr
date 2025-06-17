@@ -1,0 +1,472 @@
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import Card from "../card";
+import SkeletonLoader from "../SkeletonLoader";
+import PropTypes from "prop-types";
+import ShopFilter from "../../app/collection/ShopFilter";
+import { createPortal } from "react-dom";
+import axios from "../../services/axios";
+
+const Main = ({
+  className = "",
+  products,
+  loading,
+  error,
+  page,
+  onPageChange,
+  totalPages,
+  hasMore,
+  loadingMore,
+  onLoadMore,
+  country,
+  collectionId // <-- Accept collectionId as a prop
+}) => {
+  const [filters, setFilters] = useState({});
+  const [sortBy, setSortBy] = useState("");
+  const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [showFilterDrawer, setShowFilterDrawer] = useState(false);
+  const [isBrowser, setIsBrowser] = useState(false);
+  const [fetchedProducts, setFetchedProducts] = useState([]);
+  const [fetchLoading, setFetchLoading] = useState(false);
+  // Track if filter is applied
+  const [filterApplied, setFilterApplied] = useState(false);
+
+  useEffect(() => {
+    setIsBrowser(true);
+  }, []);
+
+  // Fetch products from API only when filter is applied
+  useEffect(() => {
+    if (!filterApplied) return;
+    const fetchProductsFromApi = async () => {
+      setFetchLoading(true);
+      try {
+        const params = new URLSearchParams();
+
+        params.append('currency', country?.toLowerCase() || 'uae');
+        if (filters.priceMin !== undefined && filters.priceMin !== null && filters.priceMin !== "") {
+          params.append('priceMin', filters.priceMin);
+        }
+        if (filters.priceMax !== undefined && filters.priceMax !== null && filters.priceMax !== "") {
+          params.append('priceMax', filters.priceMax);
+        }
+        // Always send collection id as 'collection' param for filter API
+        if (collectionId) {
+          params.append('collection', collectionId);
+        }
+        Object.entries(filters).forEach(([key, value]) => {
+          if (
+            value !== "" &&
+            value !== false &&
+            key !== 'priceMin' &&
+            key !== 'priceMax' &&
+            key !== 'collection' // avoid duplicate
+          ) {
+            params.append(key, value);
+          }
+        });
+        if (sortBy) {
+          params.append('sortBy', sortBy);
+        }
+        params.append('page', page || 1);
+        params.append('limit', 12);
+
+        const url = `https://0vm9jauvgc.execute-api.us-east-1.amazonaws.com/stag/api/products/filters/search?${params.toString()}`;
+        // console.log("API URL with params:", url);
+
+        const response = await axios.get(url);
+        const data = response.data;
+
+        if (data && data.products) {
+          setFetchedProducts(data.products);
+        } else {
+          setFetchedProducts([]);
+        }
+      } catch (err) {
+        setFetchedProducts([]);
+        console.error("Error fetching products from API:", err);
+      } finally {
+        setFetchLoading(false);
+      }
+    };
+
+    fetchProductsFromApi();
+  }, [filters, sortBy, page, country, filterApplied]);
+
+  // Helper function to get currency symbol based on country
+  const getCurrencySymbol = (country) => {
+    if (!country) return '$';
+    const countryUpper = country.toUpperCase();
+    switch (countryUpper) {
+      case 'INDIA': return '₹';
+      case 'UAE': return 'AED';
+      case 'KSA': return 'SR';
+      case 'KUWAIT': return 'KD';
+      case 'QATAR': return 'QAR';
+      default: return '$';
+    }
+  };
+
+  // Helper function to get price for current country
+  const getCountryPrice = (priceObj) => {
+    if (!priceObj || typeof priceObj !== 'object') return '';
+    if (!country) return Object.values(priceObj)[0] || '';
+
+    const countryKey = country.toLowerCase();
+    return priceObj[countryKey] || Object.values(priceObj)[0] || '';
+  };
+
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters);
+    setFilterApplied(true); // Mark that filter is now applied
+  };
+
+  const handleReset = () => {
+    setFilters({});
+    setSortBy("");
+    setShowSortDropdown(false);
+    setFilterApplied(false); // Reset to use parent products
+    setFetchedProducts([]);  // Clear fetched products
+  };
+
+  // Use products from parent for rendering, unless filter is applied, then use fetchedProducts
+  const getSortedProducts = (productsToSort) => {
+    if (!productsToSort || !Array.isArray(productsToSort)) return [];
+
+    switch (sortBy) {
+      case 'bestSeller':
+        return [...productsToSort].sort((a, b) => (b.bestSeller || 0) - (a.bestSeller || 0));
+      case 'newArrival':
+        return [...productsToSort].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      case 'nameAsc':
+        return [...productsToSort].sort((a, b) => a.name?.en?.localeCompare(b.name?.en || ''));
+      case 'nameDesc':
+        return [...productsToSort].sort((a, b) => b.name?.en?.localeCompare(a.name?.en || ''));
+      case 'priceLowToHigh':
+        return [...productsToSort].sort((a, b) => {
+          const priceA = parseFloat(getCountryPrice(a.price)) || 0;
+          const priceB = parseFloat(getCountryPrice(b.price)) || 0;
+          return priceA - priceB;
+        });
+      case 'priceHighToLow':
+        return [...productsToSort].sort((a, b) => {
+          const priceA = parseFloat(getCountryPrice(a.price)) || 0;
+          const priceB = parseFloat(getCountryPrice(b.price)) || 0;
+          return priceB - priceA;
+        });
+      case 'newest':
+        return [...productsToSort].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      case 'rating':
+        return [...productsToSort].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+      case 'reviews':
+        return [...productsToSort].sort((a, b) => (b.reviewsCount || 0) - (a.reviewsCount || 0));
+      case 'price':
+        return [...productsToSort].sort((a, b) => {
+          const priceA = parseFloat(getCountryPrice(a.price)) || 0;
+          const priceB = parseFloat(getCountryPrice(b.price)) || 0;
+          return priceA - priceB;
+        });
+      default:
+        return productsToSort;
+    }
+  };
+
+  const getFilteredProducts = () => {
+    if (!products.data || !Array.isArray(products.data)) return [];
+
+    let result = [...products.data];
+
+    if (Object.values(filters).some(value => value !== "")) {
+      result = result.filter(product => {
+        if (!product.watchDetails) return false;
+
+        return Object.entries(filters).every(([key, value]) => {
+          if (!value) return true;
+          return product.watchDetails[key] === value;
+        });
+      });
+    }
+
+    return getSortedProducts(result);
+  };
+
+  // If filter is applied, show fetchedProducts, else show parent products
+  const productsToRender = filterApplied
+    ? (fetchLoading ? [] : fetchedProducts)
+    : getFilteredProducts();
+
+  const toggleFilterDrawer = () => {
+    setShowFilterDrawer(!showFilterDrawer);
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = !showFilterDrawer ? 'hidden' : 'unset';
+    }
+  };
+
+  const getActiveFilterCount = () => {
+    return Object.values(filters).filter(value => value !== "" && value !== false).length;
+  };
+
+  if (error) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-xl text-red-500">Error: {error}</div>
+      </div>
+    );
+  }
+
+  if (loading && page === 1) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="text-xl text-white">Loading products...</div>
+      </div>
+    );
+  }
+
+  const handleSortChange = (newSortBy) => {
+    setSortBy(newSortBy);
+    setShowSortDropdown(false);
+  };
+
+  const getSortDisplayText = () => {
+    switch (sortBy) {
+      case 'bestSeller': return 'Sort by Bestseller';
+      case 'newArrival': return 'Sort by New Arrival';
+      case 'nameAsc': return 'Sort A-Z';
+      case 'nameDesc': return 'Sort Z-A';
+      case 'priceLowToHigh': return 'Price: Low to High';
+      case 'priceHighToLow': return 'Price: High to Low';
+      case 'newest': return 'Sort by Newest';
+      case 'rating': return 'Sort by Rating';
+      case 'reviews': return 'Sort by Reviews';
+      case 'price': return 'Sort by Price';
+      default: return 'Sort By';
+    }
+  };
+
+  return (
+    <div className={`flex flex-col items-center justify-start gap-10 text-center text-base text-black font-h5-24 mq450:gap-5 ${className}`}>
+      <div className="w-full max-w-[1360px] flex flex-row items-start justify-between relative mq750:px-4 mq450:w-full">
+        <div className="w-full flex flex-col gap-6">
+          <div className="flex flex-row items-center justify-between w-full">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={toggleFilterDrawer}
+                className="flex items-center gap-2 text-black px-4 py-2 bg-[#fff] border border-solid-[1px] border-black rounded-[50px]"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6h18M3 12h18M3 18h18" />
+                </svg>
+                <span>Filters</span>
+                {getActiveFilterCount() > 0 && (
+                  <span className="bg-white text-black w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold">
+                    {getActiveFilterCount()}
+                  </span>
+                )}
+              </button>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="rounded-[50px] flex flex-row items-center justify-center py-2 px-6">
+                <div className="relative leading-[150%] font-medium mq450:hidden">
+                  {(productsToRender && typeof productsToRender.length === "number" ? productsToRender.length : 0)} Items
+                  {Object.values(filters).some(value => value !== "" && value !== false) &&
+                    ` (Filtered)`
+                  }
+                </div>
+              </div>
+
+              <div className="relative sort-dropdown mq450:gap-[24px]">
+                <div
+                  className="rounded-[50px] border-[#000] border-solid border-[1px] flex items-center py-1.5 px-[15px] gap-2 cursor-pointer"
+                  onClick={() => setShowSortDropdown(!showSortDropdown)}
+                >
+                  <div className="relative leading-[150%] font-medium text-sm">{getSortDisplayText()}</div>
+                  <Image
+                    width={20}
+                    height={20}
+                    alt=""
+                    src="/iconamoonarrowup2-2.svg"
+                    className={`transition-transform duration-300 ${showSortDropdown ? 'rotate-180' : ''}`}
+                  />
+                </div>
+
+                {showSortDropdown && (
+                  <>
+                    <div
+                      className="sort-dropdown-overlay"
+                      onClick={() => setShowSortDropdown(false)}
+                    ></div>
+                    <div className="sort-dropdown-menu">
+                      <button
+                        className={`sort-dropdown-item ${sortBy === '' ? 'active' : ''}`}
+                        onClick={() => handleSortChange('')}
+                      >
+                        Default Sorting
+                      </button>
+                      <button
+                        className={`sort-dropdown-item ${sortBy === 'bestSeller' ? 'active' : ''}`}
+                        onClick={() => handleSortChange('bestSeller')}
+                      >
+                        Sort by Bestseller
+                      </button>
+                      <button
+                        className={`sort-dropdown-item ${sortBy === 'newArrival' ? 'active' : ''}`}
+                        onClick={() => handleSortChange('newArrival')}
+                      >
+                        Sort by New Arrival
+                      </button>
+                      <button
+                        className={`sort-dropdown-item ${sortBy === 'nameAsc' ? 'active' : ''}`}
+                        onClick={() => handleSortChange('nameAsc')}
+                      >
+                        Sort A-Z
+                      </button>
+                      <button
+                        className={`sort-dropdown-item ${sortBy === 'nameDesc' ? 'active' : ''}`}
+                        onClick={() => handleSortChange('nameDesc')}
+                      >
+                        Sort Z-A
+                      </button>
+                      <button
+                        className={`sort-dropdown-item ${sortBy === 'priceLowToHigh' ? 'active' : ''}`}
+                        onClick={() => handleSortChange('priceLowToHigh')}
+                      >
+                        Price: Low to High
+                      </button>
+                      <button
+                        className={`sort-dropdown-item ${sortBy === 'priceHighToLow' ? 'active' : ''}`}
+                        onClick={() => handleSortChange('priceHighToLow')}
+                      >
+                        Price: High to Low
+                      </button>
+                      <button
+                        className={`sort-dropdown-item ${sortBy === 'newest' ? 'active' : ''}`}
+                        onClick={() => handleSortChange('newest')}
+                      >
+                        Sort by Newest
+                      </button>
+                      <button
+                        className={`sort-dropdown-item ${sortBy === 'rating' ? 'active' : ''}`}
+                        onClick={() => handleSortChange('rating')}
+                      >
+                        Sort by Rating
+                      </button>
+                      <button
+                        className={`sort-dropdown-item ${sortBy === 'reviews' ? 'active' : ''}`}
+                        onClick={() => handleSortChange('reviews')}
+                      >
+                        Sort by Reviews
+                      </button>
+                      <button
+                        className="sort-dropdown-item text-red-400"
+                        onClick={handleReset}
+                      >
+                        Reset All
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="skeleton-grid flex flex-row items-start justify-start flex-wrap gap-8 mq750:gap-4 mq450:gap-2 mq450:justify-between w-full mq1050:justify-center">
+            {fetchLoading ? (
+              // Show skeleton loaders during loading
+              Array.from({ length: 8 }, (_, index) => (
+                <div key={`skeleton-${index}`} className="w-[calc(25%-24px)] min-w-[260px] max-w-[320px] mq750:w-[48%] mq450:w-[48%] mq450:min-w-0 min-h-[480px]">
+                  <SkeletonLoader />
+                </div>
+              ))
+            ) : productsToRender.length > 0 ? (
+              productsToRender.map((product, index) => {
+                const currencySymbol = getCurrencySymbol(country);
+                const productPrice = getCountryPrice(product.price);
+                const displayPrice = productPrice ? `${currencySymbol} ${productPrice}` : '';
+
+                const productDiscountPrice = getCountryPrice(product.discountPrice);
+                const displayDiscountPrice = productDiscountPrice ? `${currencySymbol} ${productDiscountPrice}` : '';
+
+                const productRating = getCountryPrice(product.ratings);
+                const displayProductRatings = productRating ? `${productRating}` : '';
+
+                return (
+                  <div key={product._id || index} className="w-[calc(25%-24px)] min-w-[260px] max-w-[320px] mq750:w-[46%] mq450:w-[48%] mq450:min-w-0 ">
+                    <Card
+                      stock={product.stock}
+                      productId={product._id}
+                      images={product.imageLinks?.image1}
+                      hoverImage={product.imageLinks?.image3}
+                      classic={product.collection?.name || "Classic"}
+                      name={product?.name?.en}
+                      icroundStar="/icroundstar-1.svg"
+                      dialColor={product?.watchDetails?.dialColor?.en}
+                      price={displayPrice}
+                      discountPrice={displayDiscountPrice}
+                      country={country}
+                      rating={displayProductRatings}
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <div className="w-full text-center py-10">No products available</div>
+            )}
+          </div>
+
+          {hasMore && !loading && (
+            <div className="flex justify-center mt-12 mb-8">
+              <button
+                onClick={onLoadMore}
+                disabled={loadingMore}
+                className="px-8 py-3 bg-black text-white rounded-full font-medium border border-solid-1px border-black hover:border-black hover:bg-white hover:text-black transition-colors cursor-pointer"
+              >
+                {loadingMore ? (
+                  <div className="flex items-center">
+                    <div className="animate-spin h-5 w-5 mr-3 border-t-2 border-b-2 border-black rounded-full"></div>
+                    Loading...
+                  </div>
+                ) : (
+                  "Load More"
+                )}
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {isBrowser && showFilterDrawer && createPortal(
+        <div className="fixed inset-0 bg-white bg-opacity-70 z-[9999]" onClick={toggleFilterDrawer}>
+          <div
+            className="fixed top-0 left-0 h-full w-[320px] bg-white border-r border-gray-800 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+            style={{ touchAction: 'manipulation' }}
+          >
+            <div className="p-4 h-[calc(100%-72px)]">
+              <ShopFilter onFilterChange={handleFilterChange} initialFilters={filters} onReset={handleReset} />
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+    </div>
+  );
+};
+
+Main.propTypes = {
+  className: PropTypes.string,
+  products: PropTypes.shape({
+    data: PropTypes.array,
+    total: PropTypes.number
+  }).isRequired,
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  page: PropTypes.number.isRequired,
+  onPageChange: PropTypes.func.isRequired,
+  totalPages: PropTypes.number.isRequired,
+  hasMore: PropTypes.bool.isRequired,
+  loadingMore: PropTypes.bool.isRequired,
+  onLoadMore: PropTypes.func.isRequired,
+  country: PropTypes.string
+};
+
+export default Main;
