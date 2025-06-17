@@ -5,115 +5,179 @@ const BASE_URL = "https://tornado-livid.vercel.app/";
 
 export async function getServerSideProps({ res }) {
   try {
-    // Fetch data from all endpoints concurrently
-    const [productsRes, categoriesRes, collectionsRes, blogsRes] = await Promise.all([
+    // Fetch all necessary data
+    const [
+      productsRes, 
+      movementsRes, 
+      collectionsRes, 
+      blogsRes,
+      homeRes,
+      aboutRes,
+      faqCountryRes,
+      newArrivalsRes,
+      featuredRes,
+      bestsellersRes,
+      allProductsRes
+    ] = await Promise.all([
       fetch(`${apiUrl}/products`),
-      fetch(`${apiUrl}/categories`),
+      fetch(`${apiUrl}/movement`),
       fetch(`${apiUrl}/collection`),
       fetch(`${apiUrl}/blogs`),
+      fetch(`${apiUrl}/home`),
+      fetch(`${apiUrl}/about`),
+      fetch(`${apiUrl}/faq-country`),
+      fetch(`${apiUrl}/products/new-arrivals`),
+      fetch(`${apiUrl}/products/featured`),
+      fetch(`${apiUrl}/products/bestsellers`),
+      fetch(`${apiUrl}/products/all`),
     ]);
 
-    // Process all responses
-    const [productsData, categoriesData, collectionsData, blogsData] = await Promise.all([
+    // Parse all responses
+    const [
+      productsData, 
+      movementsData, 
+      collectionsData, 
+      blogsData,
+      homeData,
+      aboutData,
+      faqCountryData,
+      newArrivalsData,
+      featuredData,
+      bestsellersData,
+      allProductsData
+    ] = await Promise.all([
       productsRes.json(),
-      categoriesRes.json(),
+      movementsRes.json(),
       collectionsRes.json(),
       blogsRes.json(),
+      homeRes.json(),
+      aboutRes.json(),
+      faqCountryRes.json(),
+      newArrivalsRes.json(),
+      featuredRes.json(),
+      bestsellersRes.json(),
+      allProductsRes.json(),
     ]);
 
-    // Static URLs with proper formatting
+    // Static URLs
     const staticUrls = [
       "",
-      "offers",
-      "seasoning",
-      "blogs",
-      "about-us",
-      "faqs",
       "contact-us",
-    ].map(path => `
-      <url>
-        <loc>${BASE_URL}/${path}</loc>
-        <lastmod>${new Date().toISOString()}</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>${path === "" ? "1.0" : "0.6"}</priority>
-      </url>
-    `).join("");
+      "home",
+      "about",
+      "faq-country",
+      "products/new-arrivals",
+      "products/featured",
+      "products/bestsellers",
+      "products/all"
+    ]
+      .map(
+        (path) => `
+        <url>
+          <loc>${BASE_URL}/${path}</loc>
+          <changefreq>monthly</changefreq>
+          <priority>0.6</priority>
+        </url>
+      `
+      )
+      .join("");
 
-    // Product URLs with proper formatting
-    const productUrls = (productsData || []).map(product => `
-      <url>
-        <loc>${BASE_URL}/product/${product.slug}</loc>
-        <lastmod>${new Date(product.updatedAt || Date.now()).toISOString()}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.9</priority>
-      </url>
-    `).join("");
+    // Product URLs
+    const productUrls = (productsData || [])
+      .map(
+        (p) => `
+        <url>
+          <loc>${BASE_URL}/product/${p.slug}</loc>
+          <changefreq>weekly</changefreq>
+          <priority>0.9</priority>
+        </url>
+      `
+      )
+      .join("");
 
-    // Category URLs with proper formatting
-    const categoryUrls = (categoriesData || []).map(category => `
-      <url>
-        <loc>${BASE_URL}/category/${category.slug}</loc>
-        <lastmod>${new Date().toISOString()}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-      </url>
-    `).join("");
+    // Movement URLs
+    const movementUrls = (movementsData || [])
+      .map(
+        (m) => `
+        <url>
+          <loc>${BASE_URL}/movement/${m.slug}</loc>
+          <changefreq>weekly</changefreq>
+          <priority>0.7</priority>
+        </url>
+      `
+      )
+      .join("");
 
-    // Collection URLs with proper formatting
-    const collectionUrls = (collectionsData || []).map(collection => `
-      <url>
-        <loc>${BASE_URL}/collection/${collection.slug}</loc>
-        <lastmod>${new Date().toISOString()}</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.7</priority>
-      </url>
-    `).join("");
+    // Collection URLs
+    const collectionUrls = (collectionsData || [])
+      .map(
+        (c) => `
+        <url>
+          <loc>${BASE_URL}/collection/${c.slug}</loc>
+          <changefreq>weekly</changefreq>
+          <priority>0.7</priority>
+        </url>
+      `
+      )
+      .join("");
 
-    // Blog URLs with proper formatting
-    const blogUrls = (blogsData?.blogs || []).map(blog => `
-      <url>
-        <loc>${BASE_URL}/blog/${blog._id}</loc>
-        <lastmod>${new Date(blog.updatedAt || Date.now()).toISOString()}</lastmod>
-        <changefreq>monthly</changefreq>
-        <priority>0.6</priority>
-      </url>
-    `).join("");
+    // Blog URLs
+    const blogUrls = (blogsData?.blogs || [])
+      .map(
+        (b) => `
+        <url>
+          <loc>${BASE_URL}/blog/${b._id}</loc>
+          <changefreq>monthly</changefreq>
+          <priority>0.6</priority>
+        </url>
+      `
+      )
+      .join("");
 
-    // Complete sitemap XML
+    // Special product category URLs
+    const specialProductUrls = [
+      newArrivalsData,
+      featuredData,
+      bestsellersData,
+      allProductsData
+    ]
+      .filter(data => Array.isArray(data))
+      .flatMap(data => 
+        data.map(
+          (p) => `
+          <url>
+            <loc>${BASE_URL}/product/${p.slug}</loc>
+            <changefreq>weekly</changefreq>
+            <priority>0.8</priority>
+          </url>
+        `
+        )
+      )
+      .join("");
+
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${staticUrls}
   ${productUrls}
-  ${categoryUrls}
+  ${movementUrls}
   ${collectionUrls}
   ${blogUrls}
+  ${specialProductUrls}
 </urlset>`;
 
-    // Set headers and write response
-    res.setHeader("Content-Type", "text/xml");
+    // Send XML response
+    res.setHeader("Content-Type", "application/xml");
     res.write(sitemap);
     res.end();
 
-    return { props: {} };
-
-  } catch (error) {
-    console.error("Error generating sitemap:", error);
-    
-    // Fallback minimal sitemap
-    const fallbackSitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${BASE_URL}</loc>
-    <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>`;
-
-    res.setHeader("Content-Type", "text/xml");
-    res.write(fallbackSitemap);
+    return {
+      props: {},
+    };
+  } catch (err) {
+    console.error("Sitemap generation error:", err);
+    res.setHeader("Content-Type", "application/xml");
+    res.write("<urlset></urlset>");
     res.end();
-
     return { props: {} };
   }
 }
