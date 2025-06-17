@@ -1,38 +1,36 @@
 import { NextResponse } from 'next/server';
 import { apiUrl, frontendUrl } from "../../apiUrl";
 
-const BASE_URL = frontendUrl;
+// Helper function to escape XML special characters
+function escapeXml(unsafe) {
+  return unsafe.replace(/[<>&'"]/g, function (c) {
+    switch (c) {
+      case '<': return '&lt;';
+      case '>': return '&gt;';
+      case '&': return '&amp;';
+      case "'": return '&apos;';
+      case '"': return '&quot;';
+    }
+  });
+}
 
 export async function GET() {
   try {
     // Fetch data from your APIs
     const [productsRes, collectionsRes, blogsRes] = await Promise.all([
-      fetch(`${apiUrl}/products/new-arrivals`, { 
-        next: { revalidate: 3600 } // Cache for 1 hour
-      }),
-      fetch(`${apiUrl}/collection`, { 
-        next: { revalidate: 3600 }
-      }),
-      fetch(`${apiUrl}/blogs`, { 
-        next: { revalidate: 3600 }
-      }),
+      fetch(`${apiUrl}/products/new-arrivals`),
+      fetch(`${apiUrl}/collection`),
+      fetch(`${apiUrl}/blogs`),
     ]);
 
-    let productsData = [];
+    let productsData = {};
     let collectionsData = [];
     let blogsData = [];
 
     // Handle products data
     if (productsRes.ok) {
       const productsResponse = await productsRes.json();
-      // Extract products from all countries
-      if (productsResponse.data) {
-        Object.keys(productsResponse.data).forEach(country => {
-          if (Array.isArray(productsResponse.data[country])) {
-            productsData = [...productsData, ...productsResponse.data[country]];
-          }
-        });
-      }
+      productsData = productsResponse.data || {};
     }
 
     // Handle collections data
@@ -47,39 +45,42 @@ export async function GET() {
       blogsData = blogsResponse.blogs || blogsResponse.data || [];
     }
 
-    // Static URLs for your watch website
+    // Static URLs - FIXED XML escaping
     const staticUrls = [
       "",
       "shop",
       "about-us",
-      "contact-us",
-      "blogs",
+      "contact",
       "featured",
-      "offers",
+      "blog",
       "faqs",
       "privacy-policy",
       "term-of-use",
-      "shipping&delivery",
-      "return-policy",
+      "shipping-delivery", // Fixed: changed from shipping&delivery
       "profile",
-      "cart",
-      "checkout",
-      "login",
-      "register"
     ]
       .map(
         (path) => `
         <url>
-          <loc>${BASE_URL}/${path}</loc>
-          <changefreq>monthly</changefreq>
+          <loc>${escapeXml(`${frontendUrl}/${path}`)}</loc>
+          <changefreq>${path === "" ? "daily" : "monthly"}</changefreq>
           <priority>${path === "" ? "1.0" : "0.6"}</priority>
         </url>
       `
       )
       .join("");
 
-    // Product URLs - remove duplicates by ID
-    const uniqueProducts = productsData.filter((product, index, self) => 
+    // Extract and process products
+    let allProducts = [];
+    if (productsData) {
+      Object.keys(productsData).forEach(country => {
+        if (Array.isArray(productsData[country])) {
+          allProducts = [...allProducts, ...productsData[country]];
+        }
+      });
+    }
+    
+    const uniqueProducts = allProducts.filter((product, index, self) => 
       index === self.findIndex(p => p._id === product._id)
     );
 
@@ -87,7 +88,7 @@ export async function GET() {
       .map(
         (product) => `
         <url>
-          <loc>${BASE_URL}/product/${product._id}</loc>
+          <loc>${escapeXml(`${frontendUrl}/products-details?productId=${product._id}`)}</loc>
           <changefreq>weekly</changefreq>
           <priority>0.9</priority>
         </url>
@@ -95,25 +96,23 @@ export async function GET() {
       )
       .join("");
 
-    // Collection URLs
     const collectionUrls = (collectionsData || [])
       .map(
         (collection) => `
         <url>
-          <loc>${BASE_URL}/collection?id=${collection._id}</loc>
+          <loc>${escapeXml(`${frontendUrl}/collection?id=${collection._id}`)}</loc>
           <changefreq>weekly</changefreq>
-          <priority>0.7</priority>
+          <priority>0.8</priority>
         </url>
       `
       )
       .join("");
 
-    // Blog URLs
     const blogUrls = (blogsData || [])
       .map(
         (blog) => `
         <url>
-          <loc>${BASE_URL}/blog/${blog._id}</loc>
+          <loc>${escapeXml(`${frontendUrl}/blog-details?id=${blog._id}`)}</loc>
           <changefreq>monthly</changefreq>
           <priority>0.6</priority>
         </url>
@@ -121,7 +120,6 @@ export async function GET() {
       )
       .join("");
 
-    // Generate the complete sitemap
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${staticUrls}
@@ -130,24 +128,22 @@ export async function GET() {
   ${blogUrls}
 </urlset>`;
 
-    // Return XML response
     return new NextResponse(sitemap, {
       status: 200,
       headers: {
         'Content-Type': 'application/xml',
-        'Cache-Control': 'public, max-age=3600, s-maxage=3600', // Cache for 1 hour
+        'Cache-Control': 'public, max-age=3600, s-maxage=3600',
       },
     });
 
   } catch (error) {
     console.error("Sitemap generation error:", error);
     
-    // Return minimal sitemap on error
     const fallbackSitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>${BASE_URL}</loc>
-    <changefreq>monthly</changefreq>
+    <loc>${escapeXml(frontendUrl)}</loc>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 </urlset>`;
