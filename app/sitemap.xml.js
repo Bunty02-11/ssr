@@ -1,134 +1,123 @@
-// API configuration
-import { apiUrl, frontendUrl } from "../apiUrl";
+// pages/sitemap.xml.js
+import { apiUrl } from "../apiUrl";
 
-const BASE_URL = frontendUrl;
+const BASE_URL = "https://tornado-livid.vercel.app/";
 
-export default async function sitemap() {
+export async function getServerSideProps({ res }) {
   try {
-         // Fetch data from multiple endpoints concurrently
-     const [productsRes, collectionsRes, blogsRes, categoriesRes] = await Promise.all([
-       fetch(`${apiUrl}/products/new-arrivals`, { 
-         next: { revalidate: 3600 } // Cache for 1 hour
-       }),
-       fetch(`${apiUrl}/collection`, { 
-         next: { revalidate: 3600 }
-       }),
-       fetch(`${apiUrl}/blogs`, { 
-         next: { revalidate: 3600 }
-       }),
-       fetch(`${apiUrl}/categories/all`, { 
-         next: { revalidate: 3600 }
-       }),
-     ]);
-
-    // Process responses
-    const [productsData, collectionsData, blogsData, categoriesData] = await Promise.all([
-      productsRes.ok ? productsRes.json() : { data: {} },
-      collectionsRes.ok ? collectionsRes.json() : { data: [] },
-      blogsRes.ok ? blogsRes.json() : { blogs: [] },
-      categoriesRes.ok ? categoriesRes.json() : { data: [] },
+    // Fetch data from all endpoints concurrently
+    const [productsRes, categoriesRes, collectionsRes, blogsRes] = await Promise.all([
+      fetch(`${apiUrl}/products`),
+      fetch(`${apiUrl}/categories`),
+      fetch(`${apiUrl}/collection`),
+      fetch(`${apiUrl}/blogs`),
     ]);
 
-    // Static pages with priorities
-    const staticPages = [
-      { path: '', priority: 1.0, changeFreq: 'daily' },
-      { path: 'shop', priority: 0.9, changeFreq: 'weekly' },
-      { path: 'about-us', priority: 0.8, changeFreq: 'monthly' },
-      { path: 'contact-us', priority: 0.7, changeFreq: 'monthly' },
-      { path: 'featured', priority: 0.8, changeFreq: 'weekly' },
-      { path: 'blog', priority: 0.7, changeFreq: 'weekly' },
-      { path: 'faqs', priority: 0.6, changeFreq: 'monthly' },
-      { path: 'privacy-policy', priority: 0.5, changeFreq: 'yearly' },
-      { path: 'term-of-use', priority: 0.5, changeFreq: 'yearly' },
-      { path: 'shipping&delivery', priority: 0.6, changeFreq: 'monthly' },
-      { path: 'profile', priority: 0.4, changeFreq: 'monthly' },
-      { path: 'cart', priority: 0.3, changeFreq: 'never' },
-      { path: 'checkout', priority: 0.3, changeFreq: 'never' },
-      { path: 'login', priority: 0.3, changeFreq: 'never' },
-      { path: 'register', priority: 0.3, changeFreq: 'never' },
-    ];
+    // Process all responses
+    const [productsData, categoriesData, collectionsData, blogsData] = await Promise.all([
+      productsRes.json(),
+      categoriesRes.json(),
+      collectionsRes.json(),
+      blogsRes.json(),
+    ]);
 
-    const staticSitemapEntries = staticPages.map((page) => ({
-      url: `${BASE_URL}/${page.path}`,
-      lastModified: new Date(),
-      changeFrequency: page.changeFreq,
-      priority: page.priority,
-    }));
+    // Static URLs with proper formatting
+    const staticUrls = [
+      "",
+      "offers",
+      "seasoning",
+      "blogs",
+      "about-us",
+      "faqs",
+      "contact-us",
+    ].map(path => `
+      <url>
+        <loc>${BASE_URL}/${path}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>${path === "" ? "1.0" : "0.6"}</priority>
+      </url>
+    `).join("");
 
-    let dynamicSitemapEntries = [];
+    // Product URLs with proper formatting
+    const productUrls = (productsData || []).map(product => `
+      <url>
+        <loc>${BASE_URL}/product/${product.slug}</loc>
+        <lastmod>${new Date(product.updatedAt || Date.now()).toISOString()}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+      </url>
+    `).join("");
 
-    // Extract products from all countries and remove duplicates
-    let allProducts = [];
-    if (productsData.data) {
-      Object.keys(productsData.data).forEach(country => {
-        if (Array.isArray(productsData.data[country])) {
-          allProducts = [...allProducts, ...productsData.data[country]];
-        }
-      });
-    }
-    
-    // Remove duplicate products by _id
-    const uniqueProducts = allProducts.filter((product, index, self) => 
-      index === self.findIndex(p => p._id === product._id)
-    );
+    // Category URLs with proper formatting
+    const categoryUrls = (categoriesData || []).map(category => `
+      <url>
+        <loc>${BASE_URL}/category/${category.slug}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+      </url>
+    `).join("");
 
-    // Product sitemap entries
-    const productEntries = uniqueProducts.map((product) => ({
-      url: `${BASE_URL}/products-details?productId=${product._id}`,
-      lastModified: new Date(product.updatedAt || product.createdAt || Date.now()),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    }));
+    // Collection URLs with proper formatting
+    const collectionUrls = (collectionsData || []).map(collection => `
+      <url>
+        <loc>${BASE_URL}/collection/${collection.slug}</loc>
+        <lastmod>${new Date().toISOString()}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+      </url>
+    `).join("");
 
-    // Collection sitemap entries
-    const collectionEntries = (collectionsData.data || []).map((collection) => ({
-      url: `${BASE_URL}/collection?id=${collection._id}`,
-      lastModified: new Date(collection.updatedAt || collection.createdAt || Date.now()),
-      changeFrequency: 'weekly',
-      priority: 0.8,
-    }));
+    // Blog URLs with proper formatting
+    const blogUrls = (blogsData?.blogs || []).map(blog => `
+      <url>
+        <loc>${BASE_URL}/blog/${blog._id}</loc>
+        <lastmod>${new Date(blog.updatedAt || Date.now()).toISOString()}</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+      </url>
+    `).join("");
 
-    // Blog sitemap entries
-    const blogEntries = (blogsData.blogs || blogsData.data || []).map((blog) => ({
-      url: `${BASE_URL}/blog-details?id=${blog._id}`,
-      lastModified: new Date(blog.updatedAt || blog.createdAt || Date.now()),
-      changeFrequency: 'monthly',
-      priority: 0.6,
-    }));
+    // Complete sitemap XML
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${staticUrls}
+  ${productUrls}
+  ${categoryUrls}
+  ${collectionUrls}
+  ${blogUrls}
+</urlset>`;
 
-    // Category/Movement sitemap entries
-    const categoryEntries = (categoriesData.data || []).map((category) => ({
-      url: `${BASE_URL}/movement?id=${category._id}`,
-      lastModified: new Date(category.updatedAt || category.createdAt || Date.now()),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    }));
+    // Set headers and write response
+    res.setHeader("Content-Type", "text/xml");
+    res.write(sitemap);
+    res.end();
 
-    dynamicSitemapEntries = [
-      ...productEntries,
-      ...collectionEntries,
-      ...blogEntries,
-      ...categoryEntries,
-    ];
-
-    return [...staticSitemapEntries, ...dynamicSitemapEntries];
+    return { props: {} };
 
   } catch (error) {
-    console.error('Sitemap generation error:', error);
+    console.error("Error generating sitemap:", error);
     
-    // Return basic static pages on error
-    const fallbackPages = [
-      { path: '', priority: 1.0, changeFreq: 'daily' },
-      { path: 'shop', priority: 0.9, changeFreq: 'weekly' },
-      { path: 'about-us', priority: 0.8, changeFreq: 'monthly' },
-      { path: 'contact-us', priority: 0.7, changeFreq: 'monthly' },
-    ];
+    // Fallback minimal sitemap
+    const fallbackSitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>${BASE_URL}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
 
-    return fallbackPages.map((page) => ({
-      url: `${BASE_URL}/${page.path}`,
-      lastModified: new Date(),
-      changeFrequency: page.changeFreq,
-      priority: page.priority,
-    }));
+    res.setHeader("Content-Type", "text/xml");
+    res.write(fallbackSitemap);
+    res.end();
+
+    return { props: {} };
   }
-} 
+}
+
+export default function Sitemap() {
+  return null;
+}
