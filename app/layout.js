@@ -9,10 +9,10 @@ import ClientProviders from "../components/ClientProviders";
 export const metadata = {
   title: "Tornado",
   description: "Luxury watches for the discerning customer",
-  robots: {
-    index: false,
-    follow: false,
-  },
+  // robots: {
+  //   index: false,
+  //   follow: false,
+  // },
 };
 
 export default function RootLayout({ children }) {
