@@ -385,27 +385,27 @@ const Footer = ({
                   Company
                 </div>
                 <div className="self-stretch flex flex-col items-start justify-start text-sm font-h5-24">
-                  <Link href="/contact" className="self-stretch flex flex-row items-start justify-start py-1 px-0 cursor-pointer">
+                  <Link href="/contact" className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                     <div className="flex-1 relative leading-[150%] font-medium">
                       Contact Us
                     </div>
                   </Link>
-                  <Link href="/about-us" className="self-stretch flex flex-row items-start justify-start py-1 px-0 cursor-pointer">
+                  <Link href="/about-us" className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                     <div className="flex-1 relative leading-[150%] font-medium">
                       About Us
                     </div>
                   </Link>
-                  <Link href="/blog" className="self-stretch flex flex-row items-start justify-start py-1 px-0 cursor-pointer">
+                  <Link href="/blog" className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                     <div className="flex-1 relative leading-[150%] font-medium">
                       Blogs
                     </div>
                   </Link>
-                  <Link href="/faqs" className="self-stretch flex flex-row items-start justify-start py-1 px-0 cursor-pointer">
+                  <Link href="/faqs" className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                     <div className="flex-1 relative leading-[150%] font-medium">
                       FAQs
                     </div>
                   </Link>
-                  <Link href="/profile" className="self-stretch flex flex-row items-start justify-start py-1 px-0 cursor-pointer">
+                  <Link href="/profile" className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                     <div className="flex-1 relative leading-[150%] font-medium">
                       My Account
                     </div>
@@ -433,22 +433,22 @@ const Footer = ({
                 </button>
                 {openSection === "policy" && (
                   <div className="self-stretch flex flex-col px-[24px] items-start justify-start text-sm">
-                    <Link href="/shipping&delivery" className="self-stretch flex flex-row items-start justify-start py-1 px-0 cursor-pointer">
+                    <Link href="/shipping&delivery" className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                       <div className="flex-1 relative leading-[150%] font-medium">
                         Shipping & Delivery
                       </div>
                     </Link>
-                    <div className="self-stretch flex flex-row items-start justify-start py-1 px-0">
+                    <div className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                       <div className="flex-1 relative leading-[150%] font-medium">
                         Returns & Exchange
                       </div>
                     </div>
-                    <Link href="/privacy-policy" className="self-stretch flex flex-row items-start justify-start py-1 px-0 cursor-pointer">
+                    <Link href="/privacy-policy" className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                       <div className="flex-1 relative leading-[150%] font-medium">
                         Privacy Policy
                       </div>
                     </Link>
-                    <Link href="/term-of-use" className="self-stretch flex flex-row items-start justify-start py-1 px-0 cursor-pointer">
+                    <Link href="/term-of-use" className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                       <div className="flex-1 relative leading-[150%] font-medium">
                         Terms of Service
                       </div>
@@ -462,7 +462,7 @@ const Footer = ({
                   Policy
                 </div>
                 <div className="self-stretch flex flex-col items-start justify-start text-sm">
-                  <Link href="/shipping&delivery" className="self-stretch flex flex-row items-start justify-start py-1 px-0 cursor-pointer">
+                  <Link href="/shipping&delivery" className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                     <div className="flex-1 relative leading-[150%] font-medium">
                       Shipping & Delivery
                     </div>
@@ -472,12 +472,12 @@ const Footer = ({
                       Returns & Exchange
                     </div>
                   </div>
-                  <Link href="/privacy-policy" className="self-stretch flex flex-row items-start justify-start py-1 px-0 cursor-pointer">
+                  <Link href="/privacy-policy" className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                     <div className="flex-1 relative leading-[150%] font-medium">
                       Privacy Policy
                     </div>
                   </Link>
-                  <Link href="/term-of-use" className="self-stretch flex flex-row items-start justify-start py-1 px-0 cursor-pointer">
+                  <Link href="/term-of-use" className="self-stretch flex flex-row items-start justify-start py-1 px-0 text-white no-underline hover:no-underline cursor-pointer">
                     <div className="flex-1 relative leading-[150%] font-medium">
                       Terms of Service
                     </div>

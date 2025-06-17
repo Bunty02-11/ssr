@@ -16,27 +16,53 @@ function escapeXml(unsafe) {
 
 export async function GET() {
   try {
-    // Fetch data from your APIs
-    const [productsRes, collectionsRes, blogsRes] = await Promise.all([
+    // Fetch data from your APIs - Added product collections and product movements
+    const [productsRes, allProductsRes, productCollectionsRes, productMovementsRes, movementsRes, blogsRes] = await Promise.all([
       fetch(`${apiUrl}/products/new-arrivals`),
-      fetch(`${apiUrl}/collection`),
+      fetch(`${apiUrl}/products/all`),
+      fetch(`${apiUrl}/products/collection`),
+      fetch(`${apiUrl}/products/movement`),
+      fetch(`${apiUrl}/movement`),
       fetch(`${apiUrl}/blogs`),
     ]);
 
     let productsData = {};
-    let collectionsData = [];
+    let allProductsData = {};
+    let productCollectionsData = [];
+    let productMovementsData = [];
+    let movementsData = [];
     let blogsData = [];
 
-    // Handle products data
+    // Handle new arrivals products data
     if (productsRes.ok) {
       const productsResponse = await productsRes.json();
       productsData = productsResponse.data || {};
     }
 
-    // Handle collections data
-    if (collectionsRes.ok) {
-      const collectionsResponse = await collectionsRes.json();
-      collectionsData = collectionsResponse.data || [];
+    // Handle all products data
+    if (allProductsRes.ok) {
+      const allProductsResponse = await allProductsRes.json();
+      allProductsData = allProductsResponse.data || {};
+    }
+
+    // Handle product collections data
+    if (productCollectionsRes.ok) {
+      const productCollectionsResponse = await productCollectionsRes.json();
+      productCollectionsData = productCollectionsResponse.data || productCollectionsResponse || [];
+      console.log('Product Collections from /products/collection:', productCollectionsData.length);
+    }
+    
+    // Handle product movements data
+    if (productMovementsRes.ok) {
+      const productMovementsResponse = await productMovementsRes.json();
+      productMovementsData = productMovementsResponse.data || productMovementsResponse || [];
+      console.log('Product Movements from /products/movement:', productMovementsData.length);
+    }
+
+    // Handle movements data
+    if (movementsRes.ok) {
+      const movementsResponse = await movementsRes.json();
+      movementsData = movementsResponse.data || [];
     }
 
     // Handle blogs data
@@ -70,8 +96,10 @@ export async function GET() {
       )
       .join("");
 
-    // Extract and process products
+    // Extract and process all products (combine new arrivals and all products)
     let allProducts = [];
+    
+    // Process new arrivals products
     if (productsData) {
       Object.keys(productsData).forEach(country => {
         if (Array.isArray(productsData[country])) {
@@ -80,6 +108,16 @@ export async function GET() {
       });
     }
     
+    // Process all products
+    if (allProductsData) {
+      Object.keys(allProductsData).forEach(country => {
+        if (Array.isArray(allProductsData[country])) {
+          allProducts = [...allProducts, ...allProductsData[country]];
+        }
+      });
+    }
+    
+    // Remove duplicate products by _id
     const uniqueProducts = allProducts.filter((product, index, self) => 
       index === self.findIndex(p => p._id === product._id)
     );
@@ -96,13 +134,49 @@ export async function GET() {
       )
       .join("");
 
-    const collectionUrls = (collectionsData || [])
+    // Generate product collection URLs with better error handling
+    console.log('Processing product collections for sitemap:', productCollectionsData?.length || 0);
+    const productCollectionUrls = (productCollectionsData || [])
+      .filter(collection => collection && collection._id) // Filter out invalid collections
       .map(
-        (collection) => `
+        (collection) => {
+          console.log('Adding product collection to sitemap:', collection._id, collection.name?.en || collection.name);
+          return `
         <url>
           <loc>${escapeXml(`${frontendUrl}/collection?id=${collection._id}`)}</loc>
           <changefreq>weekly</changefreq>
           <priority>0.8</priority>
+        </url>
+      `;
+        }
+      )
+      .join("");
+
+    // Generate product movement URLs
+    console.log('Processing product movements for sitemap:', productMovementsData?.length || 0);
+    const productMovementUrls = (productMovementsData || [])
+      .filter(movement => movement && movement._id) // Filter out invalid movements
+      .map(
+        (movement) => {
+          console.log('Adding product movement to sitemap:', movement._id, movement.name?.en || movement.name);
+          return `
+        <url>
+          <loc>${escapeXml(`${frontendUrl}/movement?id=${movement._id}`)}</loc>
+          <changefreq>weekly</changefreq>
+          <priority>0.7</priority>
+        </url>
+      `;
+        }
+      )
+      .join("");
+
+    const movementUrls = (movementsData || [])
+      .map(
+        (movement) => `
+        <url>
+          <loc>${escapeXml(`${frontendUrl}/movement?id=${movement._id}`)}</loc>
+          <changefreq>weekly</changefreq>
+          <priority>0.7</priority>
         </url>
       `
       )
@@ -124,7 +198,9 @@ export async function GET() {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   ${staticUrls}
   ${productUrls}
-  ${collectionUrls}
+  ${productCollectionUrls}
+  ${productMovementUrls}
+  ${movementUrls}
   ${blogUrls}
 </urlset>`;
 

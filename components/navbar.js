@@ -434,36 +434,36 @@ const Navbar = ({
               animate="animate"
               style={{ marginLeft: '100px', marginRight: '0px', maxWidth: '800px' }}
             >
-              <Link href="/about-us" onClick={onMenuItemsContainerClick}>
+              <Link href="/about-us" className="no-underline" onClick={onMenuItemsContainerClick}>
                 <motion.div
-                  className="flex flex-row items-center justify-center py-1.5 px-3 cursor-pointer hover:text-gray-300 transition-colors"
+                  className="flex flex-row items-center justify-center py-1.5 px-3 cursor-pointer hover:text-gray-300 no-underline transition-colors"
                   variants={menuItemVariants}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <div className="relative leading-[150%] font-medium">About Us</div>
+                  <div className="relative leading-[150%] font-medium text-white no-underline hover:no-underline">About Us</div>
                 </motion.div>
               </Link>
 
-              <Link href="/shop" onClick={onMenuItemsContainerClick3}>
+              <Link href="/shop" className="no-underline" onClick={onMenuItemsContainerClick3}>
                 <motion.div
-                  className="flex flex-row items-center justify-center py-1.5 px-3 cursor-pointer hover:text-gray-300 transition-colors"
+                  className="flex flex-row items-center justify-center py-1.5 px-3 cursor-pointer hover:text-gray-300 no-underline transition-colors"
                   variants={menuItemVariants}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <div className="relative leading-[150%] font-medium">Shop</div>
+                  <div className="relative leading-[150%] text-white no-underline hover:no-underline  font-medium">Shop</div>
                 </motion.div>
               </Link>
 
-              <Link href="/blog">
+              <Link href="/blog" className="no-underline" >
                 <motion.div
-                  className="flex flex-row items-center justify-center py-1.5 px-3 cursor-pointer hover:text-gray-300 transition-colors"
+                  className="flex flex-row items-center justify-center py-1.5 px-3 cursor-pointer hover:text-gray-300 no-underline transition-colors"
                   variants={menuItemVariants}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <div className="relative leading-[150%] font-medium">Blog</div>
+                  <div className="relative leading-[150%] text-white no-underline hover:no-underline font-medium">Blog</div>
                 </motion.div>
               </Link>
 
@@ -519,7 +519,7 @@ const Navbar = ({
                   <Link
                     key={collection.id || collection._id || collection.name}
                     href={`/collection?id=${collection.id || collection._id || collection.name}`}
-                    className="flex items-center gap-2 px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-white hover:bg-gray-800 no-underline hover:no-underline transition-colors"
                   >
                     {collection.image && (
                       <Image
@@ -551,7 +551,8 @@ const Navbar = ({
                       dropdown.style.opacity = '1';
                       dropdown.style.visibility = 'visible';
                     }, 10);
-                }}}
+                  }
+                }}
                 onMouseLeave={(e) => {
                   setTimeout(() => {
                     const dropdown = document.getElementById('category-dropdown');
@@ -586,7 +587,7 @@ const Navbar = ({
                   <Link
                     key={category.id || category._id || category.name}
                     href={`/movement?id=${category.id || category._id || category.name}`}
-                    className="flex items-center text-center gap-2 px-4 py-2 text-sm text-white hover:bg-gray-800 transition-colors"
+                    className="flex items-center text-center gap-2 px-4 py-2 text-sm text-white no-underline hover:no-underline hover:bg-gray-800 transition-colors"
                   >
                     <span>{category.name}</span>
                   </Link>
@@ -653,8 +654,8 @@ const Navbar = ({
               </div>
 
               <Link href="/profile/wishlist">
-                <motion.div 
-                  whileHover={{ scale: 1.1 }} 
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   className="relative"
                 >
@@ -938,7 +939,7 @@ const Navbar = ({
                 </div>
                 <Link
                   href="/profile"
-                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 text-sm no-underline hover:no-underline text-gray-300 hover:bg-gray-800 transition-colors"
                   onClick={() => {
                     setShowAccountDropdown(false);
                     handleProfileClick();
@@ -951,7 +952,7 @@ const Navbar = ({
                 </Link>
                 <Link
                   href="/profile/orders"
-                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 text-sm no-underline hover:no-underline text-gray-300 hover:bg-gray-800 transition-colors"
                   onClick={() => setShowAccountDropdown(false)}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -961,7 +962,7 @@ const Navbar = ({
                 </Link>
                 <Link
                   href="/profile/wishlist"
-                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 text-sm no-underline hover:no-underline text-gray-300 hover:bg-gray-800 transition-colors"
                   onClick={() => setShowAccountDropdown(false)}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -984,7 +985,7 @@ const Navbar = ({
               <>
                 <Link
                   href="/login"
-                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 text-sm no-underline hover:no-underline text-gray-300 hover:bg-gray-800 transition-colors"
                   onClick={() => setShowAccountDropdown(false)}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -994,7 +995,7 @@ const Navbar = ({
                 </Link>
                 <Link
                   href="/register"
-                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 transition-colors"
+                  className="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-800 no-underline hover:no-underline transition-colors"
                   onClick={() => setShowAccountDropdown(false)}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

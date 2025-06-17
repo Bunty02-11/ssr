@@ -5,7 +5,7 @@ export const apiUrl =
 //export const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 // Frontend base URL
-export const frontendUrl = "https://tornado-livid.vercel.app/"; // Replace with your actual domain
+export const frontendUrl = "https://tornado-livid.vercel.app"; // Replace with your actual domain
 
 // API endpoints
 export const endpoints = {

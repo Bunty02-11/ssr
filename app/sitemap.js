@@ -3,15 +3,21 @@ import { apiUrl, frontendUrl } from "../apiUrl";
 
 export default async function sitemap() {
   try {
-    const [productsRes, collectionsRes, blogsRes] = await Promise.all([
+    const [productsRes, allProductsRes, productCollectionsRes, productMovementsRes, movementsRes, blogsRes] = await Promise.all([
       fetch(`${apiUrl}/products/new-arrivals`, { next: { revalidate: 3600 } }),
-      fetch(`${apiUrl}/collection`, { next: { revalidate: 3600 } }),
+      fetch(`${apiUrl}/products/all`, { next: { revalidate: 3600 } }),
+      fetch(`${apiUrl}/products/collection`, { next: { revalidate: 3600 } }),
+      fetch(`${apiUrl}/products/movement`, { next: { revalidate: 3600 } }),
+      fetch(`${apiUrl}/movement`, { next: { revalidate: 3600 } }),
       fetch(`${apiUrl}/blogs`, { next: { revalidate: 3600 } }),
     ]);
 
-    const [productsData, collectionsData, blogsData] = await Promise.all([
+    let [productsData, allProductsData, productCollectionsData, productMovementsData, movementsData, blogsData] = await Promise.all([
       productsRes.ok ? productsRes.json() : { data: {} },
-      collectionsRes.ok ? collectionsRes.json() : { data: [] },
+      allProductsRes.ok ? allProductsRes.json() : { data: {} },
+      productCollectionsRes.ok ? productCollectionsRes.json() : { data: [] },
+      productMovementsRes.ok ? productMovementsRes.json() : { data: [] },
+      movementsRes.ok ? movementsRes.json() : { data: [] },
       blogsRes.ok ? blogsRes.json() : { blogs: [] },
     ]);
 
@@ -37,34 +43,62 @@ export default async function sitemap() {
       priority: page.priority,
     }));
 
-    // Product entries
+    // Product entries - combine new arrivals and all products
     let productEntries = [];
+    let allProducts = [];
+    
+    // Process new arrivals products
     if (productsData.data) {
-      let allProducts = [];
       Object.keys(productsData.data).forEach(country => {
         if (Array.isArray(productsData.data[country])) {
           allProducts = [...allProducts, ...productsData.data[country]];
         }
       });
-      
-      const uniqueProducts = allProducts.filter((product, index, self) => 
-        index === self.findIndex(p => p._id === product._id)
-      );
-
-      productEntries = uniqueProducts.map((product) => ({
-        url: `${frontendUrl}/products-details?productId=${product._id}`,
-        lastModified: new Date(product.updatedAt || Date.now()),
-        changeFrequency: 'weekly',
-        priority: 0.9,
-      }));
     }
+    
+    // Process all products
+    if (allProductsData.data) {
+      Object.keys(allProductsData.data).forEach(country => {
+        if (Array.isArray(allProductsData.data[country])) {
+          allProducts = [...allProducts, ...allProductsData.data[country]];
+        }
+      });
+    }
+    
+    // Remove duplicates and create entries
+    const uniqueProducts = allProducts.filter((product, index, self) => 
+      index === self.findIndex(p => p._id === product._id)
+    );
 
-    // Collection entries
-    const collectionEntries = (collectionsData.data || []).map((collection) => ({
+    productEntries = uniqueProducts.map((product) => ({
+      url: `${frontendUrl}/products-details?productId=${product._id}`,
+      lastModified: new Date(product.updatedAt || Date.now()),
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    }));
+
+    // Product Collection entries
+    const productCollectionEntries = (productCollectionsData.data || []).map((collection) => ({
       url: `${frontendUrl}/collection?id=${collection._id}`,
       lastModified: new Date(collection.updatedAt || Date.now()),
       changeFrequency: 'weekly',
       priority: 0.8,
+    }));
+
+    // Product Movement entries
+    const productMovementEntries = (productMovementsData.data || []).map((movement) => ({
+      url: `${frontendUrl}/movement?id=${movement._id}`,
+      lastModified: new Date(movement.updatedAt || Date.now()),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    }));
+
+    // Movement entries
+    const movementEntries = (movementsData.data || []).map((movement) => ({
+      url: `${frontendUrl}/movement?id=${movement._id}`,
+      lastModified: new Date(movement.updatedAt || Date.now()),
+      changeFrequency: 'weekly',
+      priority: 0.7,
     }));
 
     // Blog entries
@@ -75,7 +109,7 @@ export default async function sitemap() {
       priority: 0.6,
     }));
 
-    return [...staticEntries, ...productEntries, ...collectionEntries, ...blogEntries];
+    return [...staticEntries, ...productEntries, ...productCollectionEntries, ...productMovementEntries, ...movementEntries, ...blogEntries];
 
   } catch (error) {
     console.error('Sitemap generation error:', error);

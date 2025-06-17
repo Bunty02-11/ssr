@@ -149,7 +149,7 @@ const Card = ({
   return (
     <Link
       href={`/products-details?productId=${_id || productId}`}
-      className={`card-container w-full rounded-lg bg-gray-100 shadow-md overflow-hidden flex flex-col items-center justify-start text-center text-xs font-h5-24 relative cursor-pointer shadow-sm hover:shadow-md transition-shadow duration-300 focus:outline-none ${className}`}
+      className={`card-container w-full rounded-lg bg-gray-100 shadow-md overflow-hidden flex flex-col items-center justify-start text-center text-xs font-h5-24 relative cursor-pointer shadow-sm no-underline hover:shadow-md transition-shadow duration-300 focus:outline-none ${className}`}
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => setShowActions(false)}
       onTouchStart={() => deviceType !== "desktop" && setShowActions(true)}
@@ -194,7 +194,7 @@ const Card = ({
         )}
       </div>
 
-      <div className="self-stretch flex h-[130px] mq1050:h-[130px] mq750:h-[130px] mq450:h-[100px] flex-col items-center justify-center py-[24px] px-[16px] gap-[8px] mq450:p-2 text-left">
+      <div className="self-stretch flex h-[130px] mq1050:h-[130px] mq750:h-[130px] mq450:h-[100px] flex-col items-center justify-center py-[24px] px-[16px] gap-[8px] mq450:p-2 text-left no-underline ">
         <div className="self-stretch relative leading-[150%] font-medium text-gray-500 text-sm">
           {classic}
         </div>
