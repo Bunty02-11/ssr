@@ -3,25 +3,23 @@ import { apiUrl, frontendUrl } from "../apiUrl";
 
 export default async function sitemap() {
   try {
-    const [productsRes, allProductsRes, productCollectionsRes, productMovementsRes, movementsRes, blogsRes] = await Promise.all([
+    const [productsRes, allProductsRes, collectionsRes, movementsRes, blogsRes] = await Promise.all([
       fetch(`${apiUrl}/products/new-arrivals`, { next: { revalidate: 3600 } }),
       fetch(`${apiUrl}/products/all`, { next: { revalidate: 3600 } }),
-      fetch(`${apiUrl}/products/collection`, { next: { revalidate: 3600 } }),
-      fetch(`${apiUrl}/products/movement`, { next: { revalidate: 3600 } }),
-      fetch(`${apiUrl}/movement`, { next: { revalidate: 3600 } }),
+      fetch(`${apiUrl}/categories/all`, { next: { revalidate: 3600 } }),
+      fetch(`${apiUrl}/movement/all`, { next: { revalidate: 3600 } }),
       fetch(`${apiUrl}/blogs`, { next: { revalidate: 3600 } }),
     ]);
 
-    let [productsData, allProductsData, productCollectionsData, productMovementsData, movementsData, blogsData] = await Promise.all([
+    let [productsData, allProductsData, collectionsData, movementsData, blogsData] = await Promise.all([
       productsRes.ok ? productsRes.json() : { data: {} },
       allProductsRes.ok ? allProductsRes.json() : { data: {} },
-      productCollectionsRes.ok ? productCollectionsRes.json() : { data: [] },
-      productMovementsRes.ok ? productMovementsRes.json() : { data: [] },
+      collectionsRes.ok ? collectionsRes.json() : { data: [] },
       movementsRes.ok ? movementsRes.json() : { data: [] },
       blogsRes.ok ? blogsRes.json() : { blogs: [] },
     ]);
 
-    // Static pages - FIXED: removed ampersand from shipping&delivery
+    // Static pages
     const staticPages = [
       { path: '', priority: 1.0, changeFreq: 'daily' },
       { path: 'shop', priority: 0.9, changeFreq: 'weekly' },
@@ -77,23 +75,15 @@ export default async function sitemap() {
       priority: 0.9,
     }));
 
-    // Product Collection entries
-    const productCollectionEntries = (productCollectionsData.data || []).map((collection) => ({
+    // Collection entries (from categories/all)
+    const collectionEntries = (collectionsData.data || []).map((collection) => ({
       url: `${frontendUrl}/collection?id=${collection._id}`,
       lastModified: new Date(collection.updatedAt || Date.now()),
       changeFrequency: 'weekly',
       priority: 0.8,
     }));
 
-    // Product Movement entries
-    const productMovementEntries = (productMovementsData.data || []).map((movement) => ({
-      url: `${frontendUrl}/movement?id=${movement._id}`,
-      lastModified: new Date(movement.updatedAt || Date.now()),
-      changeFrequency: 'weekly',
-      priority: 0.7,
-    }));
-
-    // Movement entries
+    // Movement entries (from movement/all)
     const movementEntries = (movementsData.data || []).map((movement) => ({
       url: `${frontendUrl}/movement?id=${movement._id}`,
       lastModified: new Date(movement.updatedAt || Date.now()),
@@ -109,7 +99,7 @@ export default async function sitemap() {
       priority: 0.6,
     }));
 
-    return [...staticEntries, ...productEntries, ...productCollectionEntries, ...productMovementEntries, ...movementEntries, ...blogEntries];
+    return [...staticEntries, ...productEntries, ...collectionEntries, ...movementEntries, ...blogEntries];
 
   } catch (error) {
     console.error('Sitemap generation error:', error);
