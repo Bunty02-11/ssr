@@ -24,7 +24,7 @@ const R1 = ({ className = "", product }) => {
           className="w-[18px] relative h-[18px] overflow-hidden shrink-0 mq450:w-[16px] mq450:h-[16px]"
           width={18}
           height={18}
-          alt=""
+          alt="materialsymbolsinfooutlinerounded"
           src="/materialsymbolsinfooutlinerounded.svg"
           loading="lazy"
         />
@@ -39,7 +39,7 @@ const R1 = ({ className = "", product }) => {
           className="w-[18px] relative h-[18px] overflow-hidden shrink-0 mq450:w-[16px] mq450:h-[16px]"
           width={18}
           height={18}
-          alt=""
+          alt="solarboxlinear"
           src="/solarboxlinear.svg"
           loading="lazy"
         />
@@ -52,7 +52,7 @@ const R1 = ({ className = "", product }) => {
           className="w-[18px] relative rounded-[100px] h-[18px] overflow-hidden shrink-0 mq450:w-[16px] mq450:h-[16px]"
           width={18}
           height={18}
-          alt=""
+          alt="hugeiconstick02"
           src="/hugeiconstick02.svg"
           loading="lazy"
         />

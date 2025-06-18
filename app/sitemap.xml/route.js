@@ -50,6 +50,9 @@ export async function GET() {
       const productCollectionsResponse = await productCollectionsRes.json();
       productCollectionsData = productCollectionsResponse.data || productCollectionsResponse || [];
       console.log('Product Collections from /products/collection:', productCollectionsData.length);
+      console.log('Sample collection IDs:', productCollectionsData.slice(0, 3).map(c => c._id));
+    } else {
+      console.error('Failed to fetch product collections, status:', productCollectionsRes.status);
     }
     
     // Handle product movements data
@@ -136,14 +139,21 @@ export async function GET() {
 
     // Generate product collection URLs with better error handling
     console.log('Processing product collections for sitemap:', productCollectionsData?.length || 0);
+    
+    // Add your specific collection ID for testing
+    const testCollectionId = '6810d6e4482bd53e0f12fc48';
+    const hasTestCollection = productCollectionsData.some(c => c._id === testCollectionId);
+    console.log(`Test collection ${testCollectionId} found:`, hasTestCollection);
+    
     const productCollectionUrls = (productCollectionsData || [])
       .filter(collection => collection && collection._id) // Filter out invalid collections
       .map(
         (collection) => {
-          console.log('Adding product collection to sitemap:', collection._id, collection.name?.en || collection.name);
+          const collectionUrl = `${frontendUrl}/collection?id=${collection._id}`;
+          console.log('Adding product collection to sitemap:', collection._id, '→', collectionUrl);
           return `
         <url>
-          <loc>${escapeXml(`${frontendUrl}/collection?id=${collection._id}`)}</loc>
+          <loc>${escapeXml(collectionUrl)}</loc>
           <changefreq>weekly</changefreq>
           <priority>0.8</priority>
         </url>
@@ -151,6 +161,21 @@ export async function GET() {
         }
       )
       .join("");
+      
+    console.log('Total collection URLs generated:', (productCollectionUrls.match(/<url>/g) || []).length);
+    
+    // Ensure your specific collection is included (manual addition if needed)
+    let additionalCollectionUrls = '';
+    if (!hasTestCollection) {
+      console.log('Adding test collection manually to sitemap');
+      additionalCollectionUrls = `
+        <url>
+          <loc>${escapeXml(`${frontendUrl}/collection?id=${testCollectionId}`)}</loc>
+          <changefreq>weekly</changefreq>
+          <priority>0.8</priority>
+        </url>
+      `;
+    }
 
     // Generate product movement URLs
     console.log('Processing product movements for sitemap:', productMovementsData?.length || 0);
@@ -199,6 +224,7 @@ export async function GET() {
   ${staticUrls}
   ${productUrls}
   ${productCollectionUrls}
+  ${additionalCollectionUrls}
   ${productMovementUrls}
   ${movementUrls}
   ${blogUrls}

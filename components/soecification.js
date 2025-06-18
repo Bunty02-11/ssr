@@ -11,7 +11,7 @@ const Specification = ({ className = "", product }) => {
           className="h-[500px] w-[500px] mq1050:h-[350px] mq1050:w-[350px] rounded-3xl object-cover max-w-full mq1125:flex-1 mq450:hidden"
           width={500}
           height={500}
-          alt=""
+          alt="about_2"
           src="/about_2.webp"
           loading="lazy"
         />

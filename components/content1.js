@@ -25,7 +25,7 @@ const Content1 = ({ className = "", countryData }) => {
                   loading="lazy"
                   width={24}
                   height={24}
-                  alt=""
+                  alt="call"
                   src="/call.webp"
                 />
                 <a href="tel:+12018564358" className="flex-1 relative leading-[150%] font-medium no-underline text-inherit">
@@ -38,7 +38,7 @@ const Content1 = ({ className = "", countryData }) => {
                   loading="lazy"
                   width={24}
                   height={24}
-                  alt=""
+                  alt="mail"
                   src="/mail.webp"
                 />
                 <a href="mailto:info@tornado.store" className="flex-1 relative leading-[150%] font-medium no-underline text-inherit">
@@ -51,7 +51,7 @@ const Content1 = ({ className = "", countryData }) => {
                   loading="lazy"
                   width={24}
                   height={24}
-                  alt=""
+                  alt="location"
                   src="/location.webp"
                 />
                 <div className="flex-1 relative leading-[150%] font-medium inline-block min-w-[402px] mq750:min-w-full">
@@ -67,7 +67,7 @@ const Content1 = ({ className = "", countryData }) => {
         loading="lazy"
         width={650}
         height={550}
-        alt=""
+        alt="get_in_touch"
         src="/get_in_touch.jpg"
       />
     </section>

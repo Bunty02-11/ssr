@@ -54,6 +54,11 @@ const Navbar = ({
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
+  // Carousel state
+  const [currentAnnouncementIndex, setCurrentAnnouncementIndex] = useState(0);
+  const [scrollData, setScrollData] = useState(null);
+  const [announcements, setAnnouncements] = useState([]);
 
   // Breakpoints
   const TABLET_BREAKPOINT = 1050;
@@ -87,9 +92,65 @@ const Navbar = ({
       }
     };
 
+    const fetchScrolls = async () => {
+      try {
+        const response = await fetch('https://0vm9jauvgc.execute-api.us-east-1.amazonaws.com/stag/api/scroll/scrolls');
+        if (!response.ok) {
+          throw new Error('Failed to fetch scrolls');
+        }
+        const data = await response.json();
+        setScrollData(data[0]); // Assuming the first object contains all country data
+      } catch (err) {
+        console.error('Error fetching scrolls:', err);
+        // Fallback to default announcements if API fails
+        setAnnouncements([
+          "Sale: 20% Off - Limited Time Only",
+          "Free Shipping on Orders Over $100",
+          "New Collection Available Now"
+        ]);
+      }
+    };
+
     fetchCollections();
     fetchCategories();
+    fetchScrolls();
   }, []);
+
+  // Update announcements based on selected country
+  useEffect(() => {
+    if (scrollData && selectedCountry) {
+      const countryScrolls = scrollData[selectedCountry]?.scrolls || [];
+      const countryAnnouncements = countryScrolls.map(scroll => scroll.title);
+      setAnnouncements(countryAnnouncements.length > 0 ? countryAnnouncements : [
+        "Sale: 20% Off - Limited Time Only",
+        "Free Shipping on Orders Over $100",
+        "New Collection Available Now"
+      ]);
+      setCurrentAnnouncementIndex(0); // Reset to first announcement when country changes
+    } else if (scrollData) {
+      // Default to UAE if no country is selected
+      const defaultScrolls = scrollData.uae?.scrolls || [];
+      const defaultAnnouncements = defaultScrolls.map(scroll => scroll.title);
+      setAnnouncements(defaultAnnouncements.length > 0 ? defaultAnnouncements : [
+        "Sale: 20% Off - Limited Time Only",
+        "Free Shipping on Orders Over $100",
+        "New Collection Available Now"
+      ]);
+    }
+  }, [scrollData, selectedCountry]);
+
+  // Auto-rotate announcements
+  useEffect(() => {
+    if (announcements.length === 0) return;
+    
+    const interval = setInterval(() => {
+      setCurrentAnnouncementIndex((prevIndex) => 
+        (prevIndex + 1) % announcements.length
+      );
+    }, 4000); // Change every 4 seconds
+
+    return () => clearInterval(interval);
+  }, [announcements.length]);
 
   useEffect(() => {
     setIsBrowser(true);
@@ -165,6 +226,19 @@ const Navbar = ({
       const event = new CustomEvent('countryChange', { detail: { country: newCountry } });
       window.dispatchEvent(event);
     }
+  };
+
+  // Carousel navigation functions
+  const goToPrevAnnouncement = () => {
+    setCurrentAnnouncementIndex((prevIndex) => 
+      prevIndex === 0 ? announcements.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToNextAnnouncement = () => {
+    setCurrentAnnouncementIndex((prevIndex) => 
+      (prevIndex + 1) % announcements.length
+    );
   };
 
   const handleProfileClick = useCallback(() => {
@@ -290,11 +364,16 @@ const Navbar = ({
       className={`w-full h-30 overflow-hidden shrink-0 flex flex-col items-center justify-center box-border z-[50] text-center text-base text-[#fff] font-h5-24 navbar ${className}`}
       style={navbarStyle}
     >
-      {/* Top announcement bar */}
+      {/* Top announcement bar carousel */}
       <div className="w-full max-w-full text-black bg-white flex pr-[20px] md:pr-[40px] pl-[20px] md:pl-[40px] items-center justify-between">
         <div className="w-full max-w-[1360px] mx-auto flex px-[20px] md:px-[40px] items-center justify-between">
           <motion.div className="flex items-center">
-            <motion.div className="cursor-pointer p-2" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+            <motion.div 
+              className="cursor-pointer p-2" 
+              whileHover={{ scale: 1.1 }} 
+              whileTap={{ scale: 0.9 }}
+              onClick={goToPrevAnnouncement}
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M15 18l-6-6 6-6" />
               </svg>
@@ -310,13 +389,28 @@ const Navbar = ({
           >
             <motion.div className="flex flex-row items-center justify-center py-1.5 px-3 transition-colors" variants={menuItemVariants}>
               <div className="relative leading-[150%] font-medium text-xs sm:text-sm">
-                Sale: 20% Off - Limited Time Only
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={currentAnnouncementIndex}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {announcements[currentAnnouncementIndex]}
+                  </motion.span>
+                </AnimatePresence>
               </div>
             </motion.div>
           </motion.div>
 
           <motion.div className="flex items-center">
-            <motion.div className="cursor-pointer p-2" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+            <motion.div 
+              className="cursor-pointer p-2" 
+              whileHover={{ scale: 1.1 }} 
+              whileTap={{ scale: 0.9 }}
+              onClick={goToNextAnnouncement}
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M9 18l6-6-6-6" />
               </svg>
@@ -665,7 +759,7 @@ const Navbar = ({
                       loading="lazy"
                       width={44}
                       height={44}
-                      alt="Wishlist"
+                      alt="wish"
                       src="/wish.svg"
                     />
                     {wishlist && wishlist.length > 0 && (
@@ -759,7 +853,7 @@ const Navbar = ({
                     loading="lazy"
                     width={16}
                     height={16}
-                    alt=""
+                    alt="iconamoonarrowup2light@2x"
                     src="/iconamoonarrowup2light@2x.webp"
                   />
                 </div>

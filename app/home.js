@@ -144,7 +144,7 @@ const Home = ({ initialData }) => {
             loading="lazy"
             width={24}
             height={24}
-            alt=""
+            alt="iconamoonarrowup2@2x"
             src="/iconamoonarrowup2@2x.webp"
           />
           <div className="relative leading-[150%] font-medium">
@@ -155,7 +155,7 @@ const Home = ({ initialData }) => {
             loading="lazy"
             width={24}
             height={24}
-            alt=""
+            alt="iconamoonarrowup2-1@2x"
             src="/iconamoonarrowup2-1@2x.webp"
           />
         </div>
@@ -194,7 +194,7 @@ const Home = ({ initialData }) => {
                   loading="lazy"
                   width={44}
                   height={44}
-                  alt="Previous"
+                  alt="solararrowuplinear-2@2x"
                   src="/solararrowuplinear-2@2x.webp"
                 />
               </button>
@@ -204,7 +204,7 @@ const Home = ({ initialData }) => {
                   loading="lazy"
                   width={44}
                   height={44}
-                  alt="Next"
+                  alt="solararrowuplinear-1@2x"
                   src="/solararrowuplinear-1@2x.webp"
                 />
               </button>

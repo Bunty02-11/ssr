@@ -272,7 +272,7 @@ const Main1 = ({
                                 loading="lazy"
                                 width={24}
                                 height={24}
-                                alt="Decrease quantity"
+                                alt="icroundminus1@2x"
                                 src="/icroundminus1@2x.webp"
                               />
                             </button>
@@ -288,7 +288,7 @@ const Main1 = ({
                                 loading="lazy"
                                 width={24}
                                 height={24}
-                                alt="Increase quantity"
+                                alt="icroundplus1@2x"
                                 src="/icroundplus1@2x.webp"
                               />
                             </button>

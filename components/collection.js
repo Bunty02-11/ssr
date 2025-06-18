@@ -90,7 +90,7 @@ const Collection = ({ className = "", property1 = "Default", limit = 10, country
               loading="lazy"
               width={44}
               height={44}
-              alt=""
+              alt="solararrowuplinear-2@2x"
               src="/solararrowuplinear-2@2x.webp"
             />
           </button>
@@ -100,7 +100,7 @@ const Collection = ({ className = "", property1 = "Default", limit = 10, country
               loading="lazy"
               width={44}
               height={44}
-              alt=""
+              alt="solararrowuplinear-1@2x"
               src="/solararrowuplinear-1@2x.webp"
             />
           </button>

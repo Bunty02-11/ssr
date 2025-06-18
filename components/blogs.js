@@ -91,7 +91,7 @@ const Blogs = ({
               loading="lazy"
               width={44}
               height={44}
-              alt="Previous"
+              alt="solararrowuplinear-2@2x"
               src="/solararrowuplinear-2@2x.webp"
             />
           </button>
@@ -103,7 +103,7 @@ const Blogs = ({
               className="h-11 w-11 relative overflow-hidden shrink-0 object-contain mq450:h-8 mq450:w-8 cursor-pointer hover:opacity-80 transition-opacity"
               width={44}
               height={44}
-              alt="Next"
+              alt="solararrowuplinear-1@2x"
               src="/solararrowuplinear-1@2x.webp"
             />
           </button>

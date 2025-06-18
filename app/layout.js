@@ -21,7 +21,11 @@ export default function RootLayout({ children }) {
       <head>
         {/* Google Search Console Verification */}
         <meta name="google-site-verification" content="Auh72HE-0wU8HYwXIroXnVnPBaoE_bj8mr2pFDTwyMQ" />
-        
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+        />
+        <link rel="icon" href="/favicon.ico" />
         {/* Google Tag Manager */}
         <script
           dangerouslySetInnerHTML={{
@@ -32,7 +36,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-TH98W8PZ');`,
           }}
         />
-        
+
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-XWX57GY6HW"></script>
         <script
@@ -45,7 +49,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             `,
           }}
         />
-        
+
         {/* Microsoft Clarity */}
         <script
           type="text/javascript"
@@ -59,7 +63,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             `,
           }}
         />
-        
+
         {/* Preload critical Inter fonts */}
         <link
           rel="preload"
@@ -89,10 +93,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           type="font/woff2"
           crossOrigin="anonymous"
         />
-        
+
         {/* Apple Sign In SDK */}
-        <script 
-          type="text/javascript" 
+        <script
+          type="text/javascript"
           src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
           async
         ></script>
@@ -112,7 +116,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             style={{ display: 'none', visibility: 'hidden' }}
           ></iframe>
         </noscript>
-        
+
         <ClientProviders>
           <CountryProvider>
             {children}

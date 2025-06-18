@@ -285,7 +285,7 @@ const Login = () => {
                     {socialLoading.google ? (
                       <div className="w-6 h-6 md:w-8 md:h-8 animate-spin rounded-full border-2 border-black border-t-black"></div>
                     ) : (
-                      <Image src="/google_symbol.svg.webp" alt="Google" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8 object-contain" />
+                      <Image src="/google_symbol.svg.webp" alt="google_symbol.svg" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8 object-contain" />
                     )}
                   </button>
                   <button
@@ -298,11 +298,11 @@ const Login = () => {
                     {socialLoading.apple ? (
                       <div className="w-6 h-6 md:w-8 md:h-8 animate-spin rounded-full border-2 border-gray-300 border-t-black"></div>
                     ) : (
-                      <Image src="/Apple-logo.png" alt="Apple" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8 object-contain" />
+                      <Image src="/Apple-logo.png" alt="Apple-logo" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8 object-contain" />
                     )}
                   </button>
                   {/* <button type="button" className="p-2 md:p-3 bg-white text-black rounded-full border border-gray-300 hover:bg-gray-50 transition-colors opacity-50 cursor-not-allowed" title="Coming Soon">
-                    <Image src="/Symbol.svg.webp" alt="Facebook" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8" />
+                    <Image src="/Symbol.svg.webp" alt="Symbol.svg" width={24} height={24} className="w-6 h-6 md:w-8 md:h-8" />
                   </button> */}
                 </div>
               </form>
@@ -315,7 +315,7 @@ const Login = () => {
             <div className="relative h-[500px] w-[400px] ">
               <Image
                 src="/cat@3x.webp"
-                alt="Register"
+                alt="cat@3x"
                 layout="fill"
                 objectFit="cover"
                 loading="lazy"

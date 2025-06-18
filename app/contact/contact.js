@@ -67,7 +67,7 @@ const Contact = () => {
             loading="lazy"
             width={24}
             height={24}
-            alt=""
+            alt="iconamoonarrowup2@2x"
             src="/iconamoonarrowup2@2x.webp"
           />
           <div className="relative leading-[150%] font-medium">
@@ -78,7 +78,7 @@ const Contact = () => {
             loading="lazy"
             width={24}
             height={24}
-            alt=""
+            alt="iconamoonarrowup2-1@2x"
             src="/iconamoonarrowup2-1@2x.webp"
           />
         </div>

@@ -205,7 +205,7 @@ const Offers = ({ className = "", country, selectedCountry }) => {
                 width={isTablet ? 20 : 24}
                 height={isTablet ? 20 : 24}
                 src="/solararrowuplinear-5@1x.webp"
-                alt="Previous"
+                alt="solararrowuplinear-5@1x"
                 className="object-contain"
                 style={{ width: isTablet ? '20px' : '24px', height: isTablet ? '20px' : '24px' }}
               />
@@ -233,7 +233,7 @@ const Offers = ({ className = "", country, selectedCountry }) => {
                 width={isTablet ? 20 : 24}
                 height={isTablet ? 20 : 24}
                 src="/solararrowuplinear-5@2x.webp"
-                alt="Next"
+                alt="solararrowuplinear-5@2x"
                 className="object-contain"
                 style={{ width: isTablet ? '20px' : '24px', height: isTablet ? '20px' : '24px' }}
               />

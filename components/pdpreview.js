@@ -147,7 +147,7 @@ const Testimonials = ({ Heading }) => {
                         className="w-11 h-11 relative overflow-hidden shrink-0 object-contain mq450:w-8 mq450:h-8"
                         width={44}
                         height={44}
-                        alt="Previous"
+                        alt="solararrowuplinear-5@1x"
                         src="/solararrowuplinear-5@1x.webp"
                     />
                 </button>
@@ -156,7 +156,7 @@ const Testimonials = ({ Heading }) => {
                         className="h-11 w-11 relative overflow-hidden shrink-0 object-contain mq450:w-8 mq450:h-8"
                         width={44}
                         height={44}
-                        alt="Next"
+                        alt="solararrowuplinear-5@2x"
                         src="/solararrowuplinear-5@2x.webp"
                     />
                 </button>

@@ -20,7 +20,7 @@ const Content = ({ className = "" }) => {
         loading="lazy"
         width={1360}
         height={600}
-        alt=""
+        alt="image@2x"
         src="/image@2x.webp"
       />
       <div className="self-stretch flex flex-col items-center justify-start gap-4">
@@ -88,7 +88,7 @@ const Content = ({ className = "" }) => {
             loading="lazy"
             width={24}
             height={24}
-            alt=""
+            alt="icon--facebook1"
             src="/icon--facebook1.svg"
           />
           <Image
@@ -96,7 +96,7 @@ const Content = ({ className = "" }) => {
             loading="lazy"
             width={24}
             height={24}
-            alt=""
+            alt="icon--instagram1"
             src="/icon--instagram1.svg"
           />
           <Image
@@ -104,7 +104,7 @@ const Content = ({ className = "" }) => {
             loading="lazy"
             width={24}
             height={24}
-            alt=""
+            alt="icon--x1"
             src="/icon--x1.svg"
           />
           <Image
@@ -112,7 +112,7 @@ const Content = ({ className = "" }) => {
             loading="lazy"
             width={24}
             height={24}
-            alt=""
+            alt="icon--linkedin1"
             src="/icon--linkedin1.svg"
           />
           <Image
@@ -120,7 +120,7 @@ const Content = ({ className = "" }) => {
             loading="lazy"
             width={24}
             height={24}
-            alt=""
+            alt="icon--youtube3"
             src="/icon--youtube3.svg"
           />
         </div>

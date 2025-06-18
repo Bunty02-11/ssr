@@ -298,7 +298,7 @@ const Main = ({
                   <Image
                     width={20}
                     height={20}
-                    alt=""
+                    alt="iconamoonarrowup2-2"
                     src="/iconamoonarrowup2-2.svg"
                     className={`transition-transform duration-300 ${showSortDropdown ? 'rotate-180' : ''}`}
                   />

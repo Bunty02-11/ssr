@@ -148,7 +148,7 @@ const Faqs = ({ initialData }) => {
                                                 className={`w-6 h-6 transition-transform duration-200 ${activeIndex === index ? "rotate-180" : ""}`}
                                                 width={24}
                                                 height={24}
-                                                alt=""
+                                                alt="iconamoonarrowup21-1@2x"
                                                 src="/iconamoonarrowup21-1@2x.webp"
                                             />
                                         </div>

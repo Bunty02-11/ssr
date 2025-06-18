@@ -177,7 +177,7 @@ function ProductDetailsContent({ className = "", textStyle = {} }) {
             loading="lazy"
             width={500}
             height={500}
-            alt=""
+            alt="about_3"
             src="/about_3.jpg"
           />
         </AnimateOnScroll>
@@ -208,7 +208,7 @@ function ProductDetailsContent({ className = "", textStyle = {} }) {
                 loading="lazy"
                 width={44}
                 height={44}
-                alt="Previous"
+                alt="solararrowuplinear-2@2x"
                 src="/solararrowuplinear-2@2x.webp"
               />
             </button>
@@ -221,7 +221,7 @@ function ProductDetailsContent({ className = "", textStyle = {} }) {
                 loading="lazy"
                 width={44}
                 height={44}
-                alt="Next"
+                alt="solararrowuplinear-1@2x"
                 src="/solararrowuplinear-1@2x.webp"
               />
             </button>

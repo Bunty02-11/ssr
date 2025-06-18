@@ -40,7 +40,7 @@ const TestimonialItems = ({
               className="h-5 w-5 relative overflow-hidden shrink-0"
               width={20}
               height={20}
-              alt="Star rating"
+              alt="icroundstar-1"
               src="/icroundstar-1.svg"
               loading="lazy"
             />

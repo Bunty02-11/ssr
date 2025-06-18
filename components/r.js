@@ -251,7 +251,7 @@ const R = ({ className = "", product, relatedProducts, selectedCountry }) => {
                 className="w-24 relative h-4"
                 width={96}
                 height={16}
-                alt=""
+                alt="review"
                 src="/review.svg"
               />
               <div className="flex-1 relative leading-[150%] font-medium inline-block min-w-[111px]">
@@ -436,7 +436,7 @@ const R = ({ className = "", product, relatedProducts, selectedCountry }) => {
               loading="lazy"
               width={43}
               height={48}
-              alt=""
+              alt="icroundminus@2x"
               src="/icroundminus@2x.webp"
               onClick={decreaseQuantity}
             />
@@ -446,7 +446,7 @@ const R = ({ className = "", product, relatedProducts, selectedCountry }) => {
               loading="lazy"
               width={43}
               height={48}
-              alt=""
+              alt="icroundplus@2x"
               src="/icroundplus@2x.webp"
               onClick={increaseQuantity}
             />

@@ -6,6 +6,8 @@ const Left = ({ className = "", product }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [thumbnailStartIndex, setThumbnailStartIndex] = useState(0);
 
+  // console.log(product);
+
   // Function to decode URL
   const decodeImageUrl = (url) => {
     try {
@@ -19,16 +21,16 @@ const Left = ({ className = "", product }) => {
   // Get all image URLs from the product object and decode them
   const imageLinks = product?.imageLinks
     ? Object.keys(product.imageLinks)
-        .filter((key) => /^image\d+$/.test(key))
-        .sort((a, b) => {
-          const numA = parseInt(a.replace("image", ""), 10);
-          const numB = parseInt(b.replace("image", ""), 10);
-          return numA - numB;
-        })
-        .map((key) => decodeImageUrl(product.imageLinks[key]))
-        .filter(Boolean)
+      .filter((key) => /^image\d+$/.test(key))
+      .sort((a, b) => {
+        const numA = parseInt(a.replace("image", ""), 10);
+        const numB = parseInt(b.replace("image", ""), 10);
+        return numA - numB;
+      })
+      .map((key) => decodeImageUrl(product.imageLinks[key]))
+      .filter(Boolean)
     : [];
-  
+
   const hasImages = imageLinks.length > 0;
   const visibleThumbnails = 4;
 
@@ -90,7 +92,7 @@ const Left = ({ className = "", product }) => {
             className="rounded-3xl w-full h-full object-contain"
             width={600}
             height={600}
-            alt="Product image"
+            alt="Product?.name?.en"
             src={imageLinks[currentImageIndex]}
             priority
           />
@@ -99,7 +101,7 @@ const Left = ({ className = "", product }) => {
             className="rounded-3xl w-full h-full object-cover"
             width={500}
             height={500}
-            alt="No product image available"
+            alt="rectangle-3@2x"
             src="/rectangle-3@2x.webp"
           />
         )}
@@ -113,15 +115,14 @@ const Left = ({ className = "", product }) => {
               <div
                 key={actualIndex}
                 onClick={() => handleThumbnailClick(actualIndex)}
-                className={`flex-shrink-0 w-16 h-16 sm:w-24 sm:h-24 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${
-                  currentImageIndex === actualIndex
+                className={`flex-shrink-0 w-16 h-16 sm:w-24 sm:h-24 rounded-lg overflow-hidden cursor-pointer border-2 transition-all ${currentImageIndex === actualIndex
                     ? "border-black scale-105"
                     : "border-gray-200 hover:border-gray-400"
-                }`}
+                  }`}
               >
                 <Image
                   src={image}
-                  alt={`Thumbnail ${actualIndex + 1}`}
+                  alt={`Product?.name?.en ${actualIndex + 1}`}
                   width={96}
                   height={96}
                   className="object-contain w-full h-full"
@@ -140,11 +141,10 @@ const Left = ({ className = "", product }) => {
               {imageLinks.map((_, index) => (
                 <button
                   key={index}
-                  className={`h-[4px] w-[4px] sm:h-[5px] sm:w-[5px] rounded-[50%] ${
-                    index === currentImageIndex
+                  className={`h-[4px] w-[4px] sm:h-[5px] sm:w-[5px] rounded-[50%] ${index === currentImageIndex
                       ? "bg-[#000]"
                       : "bg-[rgba(0,0,0,0.16)]"
-                  }`}
+                    }`}
                   onClick={() => {
                     setCurrentImageIndex(index);
                     if (imageLinks.length > visibleThumbnails) {

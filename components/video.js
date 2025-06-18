@@ -24,7 +24,7 @@ const Video = ({ className = "" }) => {
             loading="lazy"
             width={44}
             height={44}
-            alt="Play button"
+            alt="riplayfill"
             src="/riplayfill.svg"
           />
         </div>

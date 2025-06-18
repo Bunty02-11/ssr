@@ -118,7 +118,7 @@ const Reason = ({ className = "", country }) => {
                     className="h-8 w-8 object-contain mq450:h-4 mq450:w-4"
                     width={36}
                     height={36}
-                    alt="Previous"
+                    alt="solararrowuplinear-5@1x"
                     src="/solararrowuplinear-5@1x.webp"
                     loading="lazy"
                   />
@@ -128,7 +128,7 @@ const Reason = ({ className = "", country }) => {
                     className="h-8 w-8 object-contain mq450:h-4 mq450:w-4"
                     width={36}
                     height={36}
-                    alt="Next"
+                    alt="solararrowuplinear-5@2x"
                     src="/solararrowuplinear-5@2x.webp"
                     loading="lazy"
                   />

@@ -46,7 +46,7 @@ const Faqs = ({ className = "", country }) => {
                   }`}
                   width={24}
                   height={24}
-                  alt=""
+                  alt="iconamoonarrowup21-1@2x"
                   src="/iconamoonarrowup21-1@2x.webp"
                 />
               </div>
@@ -70,7 +70,7 @@ const Faqs = ({ className = "", country }) => {
         className="w-[600px] rounded-3xl h-[600px] object-cover mq750:w-full mq750:h-auto mq450:h-[300px]"
         width={600}
         height={600}
-        alt=""
+        alt="pexels-pixabay-221164"
         src="/pexels-pixabay-221164.webp"
       /> */}
     </section>
