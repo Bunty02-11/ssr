@@ -23,7 +23,7 @@ const Faqs = ({ initialData }) => {
             try {
                 setLoading(true);
                 const response = await axios.get("https://0vm9jauvgc.execute-api.us-east-1.amazonaws.com/stag/api/faq-country");
-                setFaqData(response.data.data && response.data.data.length > 0 ? response.data.data[0] : {});
+                setFaqData(response.data);
                 setError(null);
             } catch (err) {
                 setError("Failed to load FAQs. Please try again later.");
@@ -38,11 +38,13 @@ const Faqs = ({ initialData }) => {
         fetchFaqData();
         }
     }, [initialData]);
-    console.log(faqData, "faqData");
+    // console.log(faqData?.data[0], "faqData");
 
     // Determine which country to use (default to 'india')
     const countryKey = (selectedCountry || "india").toLowerCase();
-    const countryFaqs = faqData && faqData[countryKey] ? faqData[countryKey].faqs : [];
+    const countryFaqs = faqData?.data[0] && faqData?.data[0][countryKey] ? faqData?.data[0][countryKey].faqs : [];
+
+    // console.log(countryFaqs, "countryFaqs");
 
     const toggleFAQ = (index) => {
         setActiveIndex(activeIndex === index ? null : index);

@@ -251,7 +251,7 @@ const Offers = ({ className = "", country, selectedCountry }) => {
       <div className="w-[1360px] rounded-3xl flex flex-row items-end justify-end  py-20 px-10 box-border gap-[60px] bg-[url('/exclusive_offers_just_a_tick_away.webp')] bg-cover bg-no-repeat bg-[top] mq450:w-full mq450:gap-[20px] mq450:p-4 mq450:flex-col mq450:items-center mq750:w-full mq750:gap-[40px] mq750:px-6 mq750:py-16 mq750:flex-col mq750:items-center mq1050:w-full mq1050:gap-[30px] mq1050:px-4 mq1050:pt-[52px] mq1050:pb-[52px] mq1050:box-border relative">
         <div className="flex-1 flex flex-col items-start justify-start gap-6 mq450:items-center mq450:text-center mq450:gap-4 mq750:items-center mq750:text-center mq750:gap-5 mq750:flex-none mq750:w-full">
           <h1 className="m-0 w-[543px] relative text-[48px] leading-[120%]  font-medium font-[inherit] flex items-center mq750:text-[32px] mq750:leading-[120%] mq750:w-full mq750:max-w-[600px] mq1050:w-full mq1050:text-[38px] mq1050:leading-[46px] mq450:text-[24px] mq450:leading-[120%] mq450:w-auto">
-            Exclusive Offers Just a Tick Away
+            Exclusive Offers Just a Tick Away.
           </h1>
           <div className="w-[543px] relative text-base leading-[150%] font-medium text-white/80 flex items-center mq450:w-auto mq750:w-full mq750:max-w-[600px] mq750:text-center">
             {country?.Exclusive_Offers_Just_a_Tick_Away}
