@@ -43,6 +43,7 @@ const Navbar = ({
   const [windowWidth, setWindowWidth] = useState(0);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const accountDropdownRef = useRef(null);
+  const accountButtonRef = useRef(null);
   const searchInputRef = useRef(null);
   const searchResultsRef = useRef(null);
   const searchButtonRef = useRef(null);
@@ -727,6 +728,7 @@ const Navbar = ({
 
               <div className="relative">
                 <motion.button
+                  ref={accountButtonRef}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="flex items-center justify-center bg-transparent border-none cursor-pointer p-0"
@@ -1017,8 +1019,17 @@ const Navbar = ({
         {showAccountDropdown && (
           <motion.div
             ref={accountDropdownRef}
-            className="fixed top-20 right-10 w-52 bg-gray-900 rounded-md shadow-2xl py-2 text-white border border-gray-700"
-            style={{ zIndex: 9999 }}
+            className={`fixed w-52 bg-gray-900 rounded-md shadow-2xl py-2 text-white border border-gray-700 ${
+              windowWidth <= TABLET_BREAKPOINT 
+                ? 'top-24 left-1/2 transform -translate-x-1/2' 
+                : 'top-24'
+            }`}
+            style={{ 
+              zIndex: 9999,
+              ...(windowWidth > TABLET_BREAKPOINT && accountButtonRef.current ? {
+                left: `${accountButtonRef.current.getBoundingClientRect().left - 20}px`
+              } : {})
+            }}
             onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -1114,12 +1125,25 @@ const Navbar = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="fixed left-0 right-0 top-[80px] z-[10000] flex justify-end pointer-events-none"
+            className={`fixed z-[10000] pointer-events-none ${
+              windowWidth <= TABLET_BREAKPOINT 
+                ? 'top-[80px] left-1/2 transform -translate-x-1/2' 
+                : 'top-[80px]'
+            }`}
+            style={{
+              ...(windowWidth > TABLET_BREAKPOINT && searchButtonRef.current ? {
+                left: `${searchButtonRef.current.getBoundingClientRect().left - 20}px`
+              } : {})
+            }}
             onClick={(e) => e.stopPropagation()}
             ref={searchResultsRef}
           >
-            <div className="w-full max-w-[1360px] mr-0 ml-auto pointer-events-auto flex justify-end">
-              <div className="w-[320px]">
+            <div className="pointer-events-auto">
+              <div className={`${
+                windowWidth <= TABLET_BREAKPOINT 
+                  ? 'w-[280px] sm:w-[320px]' 
+                  : 'w-[320px]'
+              }`}>
                 <div className="relative p-4 pb-2 flex items-center bg-transparent rounded-t-2xl">
                   <span className="pointer-events-none absolute left-8 top-1/2 -translate-y-1/2 flex items-center text-gray-400">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
