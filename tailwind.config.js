@@ -28,6 +28,9 @@ module.exports = {
       'lg': '1024px',
       'xl': '1280px',
       '2xl': '1536px',
+      mq1280: {
+        raw: "screen and (max-width: 1280px)",
+      },
       mq1125: {
         raw: "screen and (max-width: 1125px)",
       },

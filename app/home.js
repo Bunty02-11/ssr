@@ -22,6 +22,7 @@ import Collection from "../components/collection";
 import SkeletonLoader from "../components/SkeletonLoader";
 import Link from "next/link";
 import Testimonials from "../components/testimonials";
+import { useRouter } from 'next/navigation';  // ✅ New (App Router)
 
 const Home = ({ initialData }) => {
   const [products, setProducts] = useState(initialData?.countryProducts || []);
@@ -29,6 +30,7 @@ const Home = ({ initialData }) => {
   const [loading, setLoading] = useState(false); // Start with false since we have initial data
   const [error, setError] = useState(null);
   const { selectedCountry, updateCountry, countryData, setCountryData } = useCountry();
+  const router = useRouter();
 
   const fetchProducts = async () => {
     try {
@@ -134,6 +136,10 @@ const Home = ({ initialData }) => {
     return priceObj[countryKey] || Object.values(priceObj)[0] || '';
   };
 
+  const handleNavigate = (path) => {
+    router.push(path);
+  };
+
   return (
     <div className="w-full relative bg-white text-black overflow-hidden flex flex-col items-center justify-center leading-[normal] tracking-[normal] text-center text-xs font-h5-24">
       {/* <PerformanceMonitor /> */}
@@ -187,8 +193,8 @@ const Home = ({ initialData }) => {
             <h2 className="m-0 relative text-[48px] leading-[120%] font-bold font-[inherit] mq450:text-center mq750:text-[34px] mq750:leading-[40px] mq1050:text-[45px] mq1050:leading-[54px] mq450:text-[24px] mq450:leading-[120%]">
               {countryData?.new_Seller_title}
             </h2>
-            <div className="flex flex-row items-start justify-center gap-4 mq450:gap-2 ">
-              <button className="swiper-button-prev-custom focus:outline-none bg-transparent">
+            <div className="flex flex-row items-start justify-center gap-4 mq450:gap-2 mq450:hidden ">
+              <button className="swiper-button-prev-custom focus:outline-none bg-transparent cursor-pointer">
                 <Image
                   className="h-11 w-11 relative overflow shrink-0 object-contain mq450:h-8 mq450:w-8"
                   loading="lazy"
@@ -198,7 +204,7 @@ const Home = ({ initialData }) => {
                   src="/solararrowuplinear-2@2x.webp"
                 />
               </button>
-              <button className="swiper-button-next-custom focus:outline-none bg-transparent">
+              <button className="swiper-button-next-custom focus:outline-none bg-transparent cursor-pointer">
                 <Image
                   className="h-11 w-11 relative overflow shrink-0 object-contain mq450:h-8 mq450:w-8"
                   loading="lazy"
@@ -298,10 +304,10 @@ const Home = ({ initialData }) => {
             )}
           </div>
         </section>
-        <section className="self-stretch overflow-hidden flex flex-row flex-wrap items-start justify-center pb-[40px] pt-[60px] mq750:py-5 mq450:py-[40px] mq450:px-[24px] px-[40px] z-[5] text-center text-base text-[rgba(255,255,255,0.8)] font-h5-24 mq1050:flex-row mq1050:gap-8 mq1050:py-5 mq1050:box-border">
-          <div className="w-[1360px] flex flex-row flex-wrap items-center justify-between gap-0 mq1050:flex-row mq1050:gap-6 mq750:flex-col">
+        <section className="  self-stretch overflow-hidden flex flex-row flex-wrap items-center justify-center pb-[40px] pt-[60px] mq750:py-5 mq450:py-[40px] mq450:px-[24px] px-[40px] z-[5] text-center text-base text-[rgba(255,255,255,0.8)] font-h5-24 mq1050:flex-row mq1050:gap-8 mq1050:py-5 mq1050:box-border">
+          <div className="w-full max-w-[1360px] flex flex-row flex-wrap items-center justify-between gap-0 mq1050:flex-row mq1050:gap-6 mq750:flex-col">
             {/* First Card */}
-            <div className="h-[700px] w-[660px] rounded-3xl flex flex-row items-start justify-center p-10 box-border bg-[url('/aurora_eon_celestial3.webp')] bg-cover bg-no-repeat bg-center mq450:h-[520px] mq450:gap-[30px] mq1050:w-[48%] mq1050:h-[600px] mq1050:p-8 mq750:w-full mq750:h-auto mq750:p-6 relative">
+            <div className=" h-[700px] w-[660px]  rounded-3xl flex flex-row items-start justify-center p-10 box-border bg-[url('/aurora_eon_celestial3.webp')] bg-cover bg-no-repeat bg-center mq450:h-[520px] mq450:gap-[30px] mq1280:h-[600px] mq1280:w-[48%] mq1050:w-[48%] mq1050:h-[600px] mq1050:p-8 mq750:w-full mq750:h-auto mq750:p-6 relative">
               {/* Black overlay */}
               <div className="absolute inset-0 bg-black bg-opacity-40 rounded-3xl"></div>
               <div className="flex-1 flex flex-col items-center justify-start gap-6 relative z-[1]">
@@ -320,7 +326,7 @@ const Home = ({ initialData }) => {
               </div>
             </div>
             {/* Second Card */}
-            <div className="h-[700px] w-[660px] rounded-3xl flex flex-row items-end justify-center p-10 box-border bg-[url('/aurora_eon_celestial1.webp')] bg-cover bg-no-repeat bg-[top] mq450:h-[520px] mq750:pt-[26px] mq750:pb-[26px] mq750:box-border mq450:gap-[30px] mq1050:w-[48%] mq1050:h-[600px] mq1050:p-8 mq750:w-full mq750:h-auto mq750:p-6 relative">
+            <div className=" h-[700px] w-[660px] rounded-3xl flex flex-row items-end justify-center p-10 box-border bg-[url('/aurora_eon_celestial1.webp')] bg-cover bg-no-repeat bg-[top] mq450:h-[520px] mq750:pt-[26px] mq750:pb-[26px] mq750:box-border mq450:gap-[30px] mq1280:h-[600px] mq1280:w-[48%] mq1050:w-[48%] mq1050:h-[600px] mq1050:p-8 mq750:w-full mq750:h-auto mq750:p-6 relative">
               {/* Black overlay */}
               <div className="absolute inset-0 bg-black bg-opacity-40 rounded-3xl"></div>
               <div className="flex-1 flex flex-col items-center justify-start gap-6 relative z-[1]">

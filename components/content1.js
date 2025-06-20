@@ -4,11 +4,11 @@ import PropTypes from "prop-types";
 const Content1 = ({ className = "", countryData }) => {
   return (
     <section
-      className={`w-[1440px] overflow-hidden flex flex-row items-center justify-center py-[60px] px-[40px] box-border gap-[40px] max-w-full text-left text-21xl text-[#000] font-h5-24 mq750:gap-[29px] mq750:pt-[23px] mq750:pb-[23px] mq750:box-border mq1125:h-auto mq450:px-[24px] mq450:py-[40px] mq450:gap-[24px] mq1125:flex-wrap ${className}`}
+      className={`w-full max-w-[1360px]  overflow-hidden flex flex-row items-center justify-center py-[60px] px-[40px] box-border gap-[40px] max-w-full text-left text-21xl text-[#000] font-h5-24 mq750:gap-[29px] mq750:pt-[23px] mq750:pb-[23px] mq750:box-border mq1125:h-auto mq450:px-[24px] mq450:py-[40px] mq450:gap-[24px] mq1125:flex-wrap ${className}`}
       style={{ margin: "0 auto" }}
     >
       <div className="flex flex-col items-center  justify-center box-border max-w-full mq750:min-w-full mq1050:box-border mq1125:flex-1">
-        <div className="w-[652px] flex flex-col items-center justify-center gap-6 max-w-full">
+        <div className="w-full mq1280:w-full flex flex-col items-center justify-center gap-6 max-w-[652px] ">
           <div className="self-stretch flex flex-row items-center justify-between">
             <h1 className="m-0 relative text-inherit leading-[120%] font-medium font-[inherit] mq750:text-13xl mq750:leading-[38px] mq1050:text-5xl mq1050:leading-[29px]">
               Get In Touch

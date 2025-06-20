@@ -136,7 +136,7 @@ const Register = () => {
       y: 0, opacity: 1, transition: { duration: 0.5 },
     },
   };
-  
+
 
 
   return (
@@ -149,11 +149,11 @@ const Register = () => {
         navbarBackgroundColor={"rgba(0, 0, 0, 0.5)"}
       />
 
-      <div className="flex flex-col lg:flex-row w-full min-h-[calc(100vh-80px)] mt-20 mb-20 mq1050:mt-0 mq1050:mb-0 items-center justify-center ">
+      <div className="flex flex-row items-center justify-center min-h-[calc(100vh-80px)] w-full max-w-[1360px] mx-auto mq450:px-4 px-[40px] pt-[120px] pb-[40px]">
         {/* Left form section */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center py-8 bg-white">
+        <div className="w-full flex items-center justify-center py-8 bg-white px-4 sm:px-0">
           <motion.div
-            className="w-full max-w-md mx-auto"
+            className="w-full max-w-md"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -165,7 +165,7 @@ const Register = () => {
               </motion.div>
 
               <motion.form variants={itemVariants} onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mq450:px-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mq450:pr-6 ">
                   <div className="space-y-2">
                     <label htmlFor="firstName" className="block text-base font-medium" style={{ fontWeight: 500 }}>
                       First Name
@@ -202,7 +202,7 @@ const Register = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mq450:px-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mq450:pr-6">
                   <div className="space-y-2">
                     <label htmlFor="email" className="block text-base font-medium" style={{ fontWeight: 500 }}>
                       Email
@@ -239,7 +239,7 @@ const Register = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2 mq450:px-4">
+                <div className="space-y-2 mq450:pr-6">
                   <label htmlFor="password" className="block text-base font-medium" style={{ fontWeight: 500 }}>
                     Password
                   </label>
@@ -257,7 +257,7 @@ const Register = () => {
                   {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
                 </div>
 
-                <div className="space-y-2 mq450:px-4">
+                <div className="space-y-2 mq450:pr-6">
                   <label htmlFor="confirmPassword" className="block text-base font-medium" style={{ fontWeight: 500 }}>
                     Confirm Password
                   </label>
@@ -277,7 +277,7 @@ const Register = () => {
                   )}
                 </div>
 
-                <div className="flex items-start mq450:px-4">
+                <div className="flex items-start mq450:pr-6">
                   <div className="flex items-center h-5">
                     <input
                       id="terms"
@@ -308,11 +308,11 @@ const Register = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-4 flex-col sm:flex-row mq450:px-4">
+                <div className="flex gap-4 flex-col sm:flex-row mq450:pr-6">
                   <Link href="/login" className="sm:flex-1">
                     <button
                       type="button"
-                      className="w-full py-3 rounded-[100px] bg-white border border-black text-black font-semibold transition cursor-pointer text-base"
+                      className="w-full py-3 rounded-[100px] bg-white border border-black text-black font-semibold transition cursor-pointer text-base mq450:pr-6"
                       style={{ fontWeight: 500 }}
                     >
                       Back
@@ -321,14 +321,14 @@ const Register = () => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="sm:flex-1 py-3 rounded-[100px] bg-black text-white font-semibold transition disabled:opacity-70 cursor-pointer text-base"
+                    className="sm:flex-1 py-3 rounded-[100px] bg-black text-white font-semibold transition disabled:opacity-70 cursor-pointer text-base mq450:pr-6"
                     style={{ fontWeight: 500 }}
                   >
                     {loading ? "Creating Account..." : "Create Account"}
                   </button>
                 </div>
 
-                <div className="flex items-center my-6 mq450:px-4">
+                <div className="flex items-center my-6 pr-6">
                   <div className="flex-grow h-px bg-black"></div>
                   <span className="mx-3 text-black text-sm">or sign up with</span>
                   <div className="flex-grow h-px bg-black"></div>
@@ -370,13 +370,9 @@ const Register = () => {
           </motion.div>
         </div>
 
-        {/* Right image section */}
-
         {/* Right image section - Hidden on screens smaller than lg (1024px) */}
-        <div className=" flex w-full w-1/2 items-center justify-center px-4 py-8 mq1050:hidden mq450:hidden">
-          <div className="relative h-[500px] w-[400px] ">
-
-       
+        <div className="hidden lg:flex w-full max-w-lg items-center justify-center px-4 py-8 mq1050:hidden mq450:hidden">
+          <div className="relative h-[740px] w-[610px]">
             <Image
               src="/cat@3x.webp"
               alt="cat@3x"

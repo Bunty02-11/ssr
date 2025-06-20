@@ -92,7 +92,7 @@ const BlogDetails = () => {
         />
       </header>
 
-      <main className="max-w-[1360px] mx-auto px-[40px] mq450:px-[24px] gap-[40px] mq450:gap-[24px]  py-[60px] mq450:py-[40px]">
+      <main className="max-w-[1360px] mx-auto px-[40px] mq450:px-[24px] gap-[40px] mq450:gap-[24px]  py-[100px] mq450:py-[100px]">
         {/* Blog Header */}
         <section className="mb-10">
           <h1 className="text-[56px] mq450:text-[32px] font-bold leading-tight mb-4">

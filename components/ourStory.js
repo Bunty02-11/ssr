@@ -28,7 +28,7 @@ const Description = ({
 
   return (
     <section
-      className={`self-stretch overflow-hidden flex flex-row items-center justify-center p-10 box-border gap-[60px] max-w-full text-left text-37xl text-[#000] font-h5-24 mq750:flex-row mq750:gap-[30px] mq750:pt-[26px] mq750:pb-[26px] mq750:box-border mq1050:flex-row mq450:px-[24px] mq450:py-[40px] mq450:gap-[24px] ${className}`}
+      className={`self-stretch overflow-hidden flex flex-row items-center justify-center p-10 box-border gap-[60px] max-w-full text-left text-37xl text-[#000] font-h5-24 mq750:flex-row mq750:gap-[30px] mq750:pt-[26px] mq750:pb-[26px] mq750:box-border mq1050:flex-row mq450:flex-col mq450:px-[24px] mq450:py-[40px] mq450:gap-[24px] ${className}`}
       style={descriptionStyle}
     >
       <AnimateOnScroll

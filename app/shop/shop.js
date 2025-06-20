@@ -66,7 +66,7 @@ const Shop = ({ initialData }) => {
       <PageBanner title="Shop" breadcrumb="Home > Shop" />
 
       <section className="self-stretch overflow-hidden flex flex-col items-center justify-start py-[60px] px-[40px] gap-[60px] z-[2] text-left text-37xl text-black font-h5-24 lg:pt-[39px] lg:pb-[39px] lg:box-border mq450:gap-[24px] mq450:py-[40px] mq450:px-[24px]  mq450:box-border mq1050:pt-[25px] mq1050:pb-[25px] mq1050:box-border">
-        <div className="w-[1360px] flex flex-row items-start justify-between px-0 mq450:w-full mq450:px-4 mq450:flex-col mq1050:gap-[25px] mq1050:w-full mq1050:flex-col">
+        <div className="w-full max-w-[1360px] flex flex-row items-start justify-between px-0 mq450:w-full mq450:px-4 mq450:flex-col mq1050:gap-[25px] mq1050:w-full mq1050:flex-col">
           {/* Added mq1050:flex-col to stack on iPads */}
           <h1 className="m-0 w-[45%] relative text-[40px] leading-[120%] mq450:text-center font-bold font-[inherit] mq450:text-[24px] mq450:w-full mq750:text-[34px] mq750:leading-[40px] mq750:w-full mq1050:text-[45px] mq1050:leading-[54px] mq1050:w-full">
             {/* Added mq1050:w-full for full width on iPad */}

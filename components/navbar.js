@@ -1106,7 +1106,7 @@ const Navbar = ({
       {/* Search dropdown */}
       {isBrowser && showSearch && createPortal(
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-[9999]"
+          className="fixed inset-0 bg-transparent bg-opacity-50 z-[9999]"
           onClick={() => setShowSearch(false)}
         >
           <motion.div
@@ -1114,75 +1114,100 @@ const Navbar = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="absolute top-20 right-4 w-[90%] max-w-xs mx-auto bg-black border border-gray-700 rounded-md shadow-lg"
+            className="fixed left-0 right-0 top-[80px] z-[10000] flex justify-end pointer-events-none"
             onClick={(e) => e.stopPropagation()}
             ref={searchResultsRef}
           >
-            <div className="p-2">
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Search products..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full p-2 bg-gray-800 text-white border border-gray-700 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-500"
-                autoFocus
-              />
-            </div>
-
-            <div className="max-h-96 overflow-y-auto">
-              {isSearching ? (
-                <div className="p-4 text-center text-gray-400">
-                  <svg className="animate-spin h-5 w-5 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Searching...
+            <div className="w-full max-w-[1360px] mr-0 ml-auto pointer-events-auto flex justify-end">
+              <div className="w-[320px]">
+                <div className="relative p-4 pb-2 flex items-center bg-transparent rounded-t-2xl">
+                  <span className="pointer-events-none absolute left-8 top-1/2 -translate-y-1/2 flex items-center text-gray-400">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <circle cx="11" cy="11" r="8" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                  </span>
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    placeholder="Search products..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-12 pr-10 py-3 bg-white text-black border-0 rounded-full shadow focus:outline-none focus:ring-2 focus:ring-black transition-all text-base"
+                    autoFocus
+                  />
+                  {searchQuery && (
+                    <button
+                      className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-400 hover:text-black transition-colors"
+                      onClick={() => setSearchQuery('')}
+                      aria-label="Clear search"
+                      tabIndex={0}
+                      type="button"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                      </svg>
+                    </button>
+                  )}
                 </div>
-              ) : searchResults.length > 0 ? (
-                <div>
-                  {searchResults.map((product, index) => {
-                    const productId = product.id || product._id || `product-${index}`;
-                    const productName = product.name?.en || (typeof product.name === 'string' ? product.name : '') || product.title?.en || (typeof product.title === 'string' ? product.title : '') || 'Product';
-                    const imageUrl = product.imageLinks?.image1 || product.image || product.imageUrl || product.img || product.thumbnail;
-
-                    return (
-                      <div
-                        key={productId}
-                        className="p-2 hover:bg-gray-800 cursor-pointer flex items-center border-t border-gray-700 first:border-t-0"
-                        onClick={() => {
-                          setShowSearch(false);
-                          setSearchQuery('');
-                          window.location.href = `/products-details?productId=${productId}`;
-                        }}
-                      >
-                        {imageUrl && (
-                          <div className="w-12 h-12 mr-3 flex-shrink-0 overflow-hidden rounded">
-                            <Image
-                              src={imageUrl}
-                              alt={productName}
-                              width={48}
-                              height={48}
-                              className="object-cover w-full h-full"
-                            />
-                          </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm text-white truncate">{productName}</p>
-                        </div>
+                {(searchQuery.trim().length > 0) && (
+                  <div className="max-h-96 overflow-y-auto px-2 pb-2 bg-white rounded-b-2xl">
+                    {isSearching ? (
+                      <div className="p-4 text-center text-gray-400">
+                        <svg className="animate-spin h-5 w-5 mx-auto mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Searching...
                       </div>
-                    );
-                  })}
-                </div>
-              ) : searchQuery.trim().length >= 3 ? (
-                <div className="p-4 text-center text-gray-400">
-                  No products found
-                </div>
-              ) : searchQuery.trim().length > 0 ? (
-                <div className="p-4 text-center text-gray-400">
-                  Type at least 3 characters to search
-                </div>
-              ) : null}
+                    ) : searchResults.length > 0 ? (
+                      <div>
+                        {searchResults.map((product, index) => {
+                          const productId = product.id || product._id || `product-${index}`;
+                          const productName = product.name?.en || (typeof product.name === 'string' ? product.name : '') || product.title?.en || (typeof product.title === 'string' ? product.title : '') || 'Product';
+                          const imageUrl = product.imageLinks?.image1 || product.image || product.imageUrl || product.img || product.thumbnail;
+
+                          return (
+                            <div
+                              key={productId}
+                              className="p-3 hover:bg-gray-100 rounded-xl cursor-pointer flex items-center border-t border-gray-200 first:border-t-0 transition-colors"
+                              onClick={() => {
+                                setShowSearch(false);
+                                setSearchQuery('');
+                                window.location.href = `/products-details?productId=${productId}`;
+                              }}
+                            >
+                              {imageUrl && (
+                                <div className="w-12 h-12 mr-4 flex-shrink-0 overflow-hidden rounded-lg bg-gray-200">
+                                  <Image
+                                    src={imageUrl}
+                                    alt={productName}
+                                    width={48}
+                                    height={48}
+                                    className="object-cover w-full h-full"
+                                  />
+                                </div>
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <p className="text-base text-black truncate font-medium">{productName}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : searchQuery.trim().length >= 3 ? (
+                      <div className="p-4 text-center text-gray-400">
+                      No products found
+                      </div>
+                    ) : (
+                      <div className="p-4 text-center text-gray-400">
+                      Type at least 3 characters to search
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </motion.div>
         </div>,

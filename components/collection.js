@@ -84,7 +84,7 @@ const Collection = ({ className = "", property1 = "Default", limit = 10, country
           {country?.collection_title}
         </h2>
         <div className="flex flex-row items-start justify-center gap-4 mq450:gap-2 mq450:hidden">
-          <button className="swiper-button-prev-custom focus:outline-none bg-transparent">
+          <button className="swiper-button-prev-custom focus:outline-none bg-transparent cursor-pointer">
             <Image
               className="h-11 w-11 relative overflow shrink-0 object-contain mq450:h-8 mq450:w-8"
               loading="lazy"
@@ -94,7 +94,7 @@ const Collection = ({ className = "", property1 = "Default", limit = 10, country
               src="/solararrowuplinear-2@2x.webp"
             />
           </button>
-          <button className="swiper-button-next-custom focus:outline-none bg-transparent">
+          <button className="swiper-button-next-custom focus:outline-none bg-transparent cursor-pointer">
             <Image
               className="h-11 w-11 relative overflow shrink-0 object-contain mq450:h-8 mq450:w-8"
               loading="lazy"

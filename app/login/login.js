@@ -202,11 +202,11 @@ const Login = () => {
         navbarBackgroundColor={"rgba(0, 0, 0, 0.5)"}
       />
 
-      <main className="flex-grow flex items-center justify-center w-full mt-10 mb-10 mq1050:mt-0 mq1050:mb-0">
-        <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-[1400px] px-[40px] py-[60px]">
+      <main className="flex-grow flex items-center justify-center w-full min-h-[calc(100vh-160px)]">
+        <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-[1360px] px-[40px] pt-[140px] pb-[60px]">
           {/* Left form section */}
-          <div className="w-full md:w-1/2 flex items-center justify-center bg-white mq450:px-[24px] mq450:py-[40px]">
-            <div className="w-full max-w-[400px]">
+          <div className="w-full max-w-[1360px] flex items-center justify-center bg-white  px-[40px] mq450:px-[24px] mq450:py-[40px] ">
+            <div className="w-full max-w-[400px] bg-white">
               <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-3 md:mb-6">WELCOME TO TORNADO</h1>
               <p className="text-black text-[16px] sm:text-sm mb-4 md:mb-8">Login to your Tornado account</p>
 
@@ -312,7 +312,7 @@ const Login = () => {
           {/* Right image section */}
 
           <div className=" flex w-full w-1/2 items-center justify-center px-4 py-8 mq1050:hidden mq450:hidden">
-            <div className="relative h-[500px] w-[400px] ">
+            <div className="relative h-[740px] w-[610px] ">
               <Image
                 src="/cat@3x.webp"
                 alt="cat@3x"

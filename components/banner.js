@@ -54,7 +54,7 @@ const Banner = ({ className = "", property1 = "Default", country }) => {
       </Head>
       <section
         ref={ref}
-        className={`self-stretch h-[750px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-[250px] px-10 box-border relative text-center text-lg text-[rgba(255,255,255,0.8)] font-h5-24 ${className} mq750:py-[150px] mq450:py-[60px] mq450:pb-0 mq450:px-4 mq450:h-[400px]`}
+        className={`self-stretch h-[750px] overflow-hidden shrink-0 flex flex-row items-center justify-center py-[250px] px-10 box-border relative text-center text-lg text-[rgba(255,255,255,0.8)] font-h5-24 ${className} mq750:py-[150px] mq450:py-[60px] mq450:pb-0 mq450:px-4 mq450:h-[400px]`}
         data-property1={property1}
         style={{ contain: 'layout style' }}
       >
@@ -108,13 +108,13 @@ const Banner = ({ className = "", property1 = "Default", country }) => {
         {/* Overlay with animated gradient */}
         <MotionOverlay opacity={0.6} />
 
-        <div className="w-full max-w-[1360px] flex flex-col items-center justify-start gap-10 md:gap-8 sm:gap-6 xs:gap-4 z-10 px-4 mq450:py-[40px]">
-          <div className="self-stretch flex flex-col items-center justify-start gap-4 md:gap-3 sm:gap-2 xs:gap-1">
+        <div className="w-full max-w-[1360px] flex flex-col items-center justify-center gap-10 md:gap-8 sm:gap-6 xs:gap-4 z-10 px-4 mq450:py-[40px]">
+          <div className="self-stretch flex flex-col items-center justify-center gap-4 md:gap-3 sm:gap-2 xs:gap-1">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="self-stretch overflow-hidden shrink-0 flex flex-row items-start justify-start gap-[16px]"
+              className="self-stretch overflow-hidden shrink-0 flex flex-row items-center justify-center gap-[16px]"
             >
               <div className="w-full relative leading-[150%] font-500 flex items-center justify-center shrink-0 text-[18px]">
                 Elite Quality
@@ -122,7 +122,7 @@ const Banner = ({ className = "", property1 = "Default", country }) => {
             </motion.div>
 
             <motion.div
-              className="w-full max-w-[1072px] overflow-hidden shrink-0 flex flex-row items-start justify-start gap-[16px] text-white"
+              className="w-full max-w-[1072px] overflow-hidden shrink-0 flex flex-row items-center justify-center gap-[16px] text-white"
             >
               <h1 className="m-0 w-full relative leading-[120%] text-[56px] mq450:text-[32px] font-bold font-inherit flex items-center justify-center shrink-0">
                 {country?.title || titleText}

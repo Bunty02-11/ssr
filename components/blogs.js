@@ -1,11 +1,12 @@
 "use client";
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import PropTypes from "prop-types";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import { useRouter } from "next/navigation";
 
 const Blogs = ({
   className = "",
@@ -18,6 +19,7 @@ const Blogs = ({
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -57,6 +59,10 @@ const Blogs = ({
       swiperInstance.slideNext();
     }
   };
+
+  const onCatContainerClick = useCallback((id) => {
+    router.push(`/blog-details?id=${id}`);
+  }, [router]);
 
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -147,17 +153,18 @@ const Blogs = ({
           {blogs.map((blog) => (
             <SwiperSlide key={blog._id}>
               <div
-                className="h-[500px] w-full rounded-3xl flex flex-col items-start justify-end py-10 pl-6 pr-5 box-border gap-4 bg-cover bg-no-repeat bg-[top] relative transition-transform duration-300 mq750:h-[400px] mq450:h-[500px] mq350:w-[350px] mq450:py-6 mq450:px-4 mq450:rounded-xl"
+                className="h-[500px] w-full rounded-3xl flex flex-col items-start justify-end py-10 pl-6 pr-5 box-border gap-4 bg-cover bg-no-repeat bg-[top] relative transition-transform duration-300 mq750:h-[400px] mq450:h-[500px] mq350:w-[350px] mq450:py-6 mq450:px-4 mq450:rounded-xl cursor-pointer"
                 style={{
                   backgroundImage: blog.sectionImages
                     ? `url('${blog.sectionImages}')`
                     : "url('/cat@3x.webp')",
                   backgroundPosition: 'center'
                 }}
+                onClick={() => onCatContainerClick(blog._id)}
               >
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent rounded-3xl mq450:rounded-xl"></div>
 
-                <h2 className="m-0 self-stretch relative text-[24px] leading-[140%] text-[#fff] font-[600] font-[inherit] mq1050:text-[19px] mq1050:leading-[27px] mq450:text-[24px] mq450:leading-[150%] mq450:line-clamp-2 z-10">
+                <h2 className="m-0 self-stretch relative text-[24px] leading-[140%] text-[#fff] font-[600] font-[inherit] mq1050:text-[19px] mq1050:leading-[27px] mq450:text-[24px] mq450:leading-[150%] mq450:line-clamp-2 z-10 cursor-pointer">
                   {blog.title}
                 </h2>
                 {/* <div className="self-stretch relative text-base leading-[150%] font-medium text-[rgba(255,255,255,0.8)] mq450:text-sm z-10">

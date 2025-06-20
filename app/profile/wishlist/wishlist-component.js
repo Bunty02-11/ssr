@@ -165,7 +165,7 @@ const WishlistPageComponent = ({ initialData }) => {
 
                           {/* Product */}
                           <div className="md:col-span-6 flex items-center gap-4">
-                            <div className="relative h-20 w-20 bg-white rounded-md overflow-hidden">
+                            <div className="relative h-[188px] w-[188px] mq450:h-[120px] mq450:w-[120px] bg-transparent rounded-md overflow-hidden">
                               <img
                                 src={
                                   product.imageLinks?.image1
@@ -181,8 +181,8 @@ const WishlistPageComponent = ({ initialData }) => {
                               />
                             </div>
                             <div>
-                              <h3 className="font-medium">{product.name?.en || product.name || "Watch"}</h3>
-                              <p className="text-sm text-gray-400">
+                              <h3 className="font-medium mq450:text-sm mq450:py-2">{product.name?.en || product.name || "Watch"}</h3>
+                              <p className="text-sm text-gray-400 mq450:text-xs">
                                 {product.watchDetails?.watchType?.en || product.classic || "Watch"}
                               </p>
                             </div>

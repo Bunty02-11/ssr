@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useCart } from "../context/CartContext";
 import { useCountry } from "../context/CountryContext";
 import { useWishlist } from "../context/WishlistContext";
+import { useRouter } from 'next/navigation';
 
 const Main1 = ({
   className = "",
@@ -38,6 +39,7 @@ const Main1 = ({
   const [filteredCart, setFilteredCart] = useState([]);
   const [filteredTotal, setFilteredTotal] = useState(0);
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const router = useRouter();
   console.log(cart, "cart")
   // Use memoized function to prevent excessive calculations
   const updateFilteredCart = useCallback(() => {
@@ -90,6 +92,10 @@ const Main1 = ({
 
   const toggleCouponInput = () => {
     setIsCouponInputVisible(!isCouponInputVisible);
+  };
+
+  const handleNavigate = (path) => {
+    router.push(path);
   };
 
   const handleCouponSubmit = (e) => {
@@ -214,11 +220,13 @@ const Main1 = ({
               return (
                 <div
                   key={itemKey}
-                  className="rounded-2xl bg-[#f7f7f7] flex flex-col items-start justify-center max-w-full"
+                  className="rounded-2xl bg-gray-100 flex flex-col items-start justify-center max-w-full"
                 >
-                  <div className="self-stretch flex flex-row items-start justify-center py-0 pl-0 pr-6 box-border gap-6 max-w-full  mq1050:px-2">
+                  <div
+                    className="self-stretch flex flex-row items-start justify-center py-0 pl-0 pr-6 box-border gap-6 max-w-full mq1050:px-2 mq450:gap-3 mq450:pr-4 mq450:pl-0"
+                  >
                     <Image
-                      className="h-[188px] w-[188px] relative overflow-hidden shrink-0 object-contain bg-[#f7f7f7]"
+                      className="h-[188px] w-[188px] relative overflow-hidden shrink-0 object-contain bg-[#f7f7f7] mq450:h-[90px] mq450:w-[90px]"
                       loading="lazy"
                       width={188}
                       height={188}
@@ -233,15 +241,15 @@ const Main1 = ({
                           : "/no-image.webp"
                       }
                     />
-                    <div className="flex flex-col items-center justify-center pt-6 px-0 pb-0 box-border max-w-full">
-                      <div className="w-[584px] flex flex-col items-start justify-start gap-3 max-w-full">
+                    <div className="flex flex-col items-center justify-center pt-6 px-0 pb-0 box-border max-w-full mq450:pt-0 mq450:items-start">
+                      <div className="w-[584px] flex flex-col items-start justify-start gap-3 max-w-full mq450:max-w-full mq450:w-auto mq450:px-2">
                         <div className="self-stretch flex flex-col items-start justify-start gap-2">
                           <div className="self-stretch flex flex-row items-start justify-between text-[rgba(0,0,0,0.8)]">
                             <div className="self-stretch flex-1 relative leading-[150%] font-medium flex items-center">
                               {item?.collection?.name || 'Product'}
                             </div>
                           </div>
-                          <div className="self-stretch relative text-lg leading-[150%] font-medium">
+                          <div className="self-stretch relative text-lg leading-[150%] font-medium mq450:text-xs">
                             {item.name}
                           </div>
                           <div className="self-stretch flex flex-row items-center justify-center text-base">
