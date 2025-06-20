@@ -53,6 +53,7 @@ const Card = ({
   }, []);
 
   const handleAddToCart = (e) => {
+    e.preventDefault();
     e.stopPropagation();
     addToCart({
       productId: _id || productId,
@@ -61,10 +62,10 @@ const Card = ({
       images: [images],
       quantity: 1,
     });
-    toast.success(`${name?.en || name || ""} added to cart`);
   };
 
   const handleWishlist = (e) => {
+    e.preventDefault();
     e.stopPropagation();
 
     let priceObj = price;

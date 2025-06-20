@@ -53,7 +53,7 @@ export const WishlistProvider = ({ children }) => {
         const response = await axiosInstance.post(`/wishlist/${product._id}`);
         if (response.data?.success) {
           setWishlist(prev => [...prev, product]);
-          toast.success("Added to wishlist!");
+          toast.success(`${product.name?.en || product.name || 'Item'} added to wishlist!`);
         }
       } catch (error) {
         toast.error(error.response?.data?.message || "Failed to add to wishlist");
@@ -82,7 +82,7 @@ export const WishlistProvider = ({ children }) => {
 
       const updatedWishlist = [...guestWishlist, formattedProduct];
       updateGuestWishlist(updatedWishlist);
-      toast.success("Added to wishlist!");
+      toast.success(`${product.name?.en || product.name || 'Item'} added to wishlist!`);
     }
   };
 
@@ -92,8 +92,9 @@ export const WishlistProvider = ({ children }) => {
         setLoading(true);
         const response = await axiosInstance.delete(`/wishlist/${productId}`);
         if (response.data?.success) {
+          const removedProduct = wishlist.find(item => item._id === productId);
           setWishlist(prev => prev.filter(item => item._id !== productId));
-          toast.success("Removed from wishlist");
+          toast.success(`${removedProduct?.name?.en || removedProduct?.name || 'Item'} removed from wishlist`);
         }
       } catch (error) {
         toast.error(error.response?.data?.message || "Failed to remove from wishlist");
@@ -102,9 +103,10 @@ export const WishlistProvider = ({ children }) => {
       }
     } else {
       const guestWishlist = JSON.parse(localStorage.getItem("guestWishlist") || "[]");
+      const removedProduct = guestWishlist.find(item => item._id === productId);
       const updatedWishlist = guestWishlist.filter(item => item._id !== productId);
       updateGuestWishlist(updatedWishlist);
-      toast.success("Removed from wishlist");
+      toast.success(`${removedProduct?.name?.en || removedProduct?.name || 'Item'} removed from wishlist`);
     }
   };
 

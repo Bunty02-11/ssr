@@ -414,7 +414,7 @@ function CartProvider({ children }) {
           ...item,
           currency: normalizeCurrency(item.currency),
         })));
-        toast.success("Added to cart successfully!");
+        toast.success(`${product.name || 'Item'} added to cart!`);
       } else {
         const cartItem = {
           productId: product.productId || product._id,
@@ -426,7 +426,7 @@ function CartProvider({ children }) {
           currency: normalizeCurrency(getCurrency()),
         };
         setGuestCart([...guestCart, cartItem]);
-        toast.success("Added to cart successfully!");
+        toast.success(`${product.name || 'Item'} added to cart!`);
       }
       return;
     }
@@ -446,7 +446,7 @@ function CartProvider({ children }) {
 
       if (response.data?.success) {
         await fetchAndProcessCart();
-        toast.success(`Added ${product.name} to cart`);
+        toast.success(`${product.name || 'Item'} added to cart!`);
       } else {
         toast.error(response.data?.message || 'Failed to add item to cart');
       }
